@@ -1,0 +1,1 @@
+Tools built on top of ABAP SDK for easy interaction with BigQuery from SAP. The repo includes opinionated sample utilities for creating / synching table definition in BQ based on SAP table, inserting data into BQ tables and reading table data. 
