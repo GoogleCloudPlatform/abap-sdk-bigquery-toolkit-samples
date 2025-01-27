@@ -1,8 +1,8 @@
-<h1 align="center">BigQuery Toolkit for SAP - Replication Objects Generator</h1>
+# ![Google Cloud](https://avatars.githubusercontent.com/u/2810941?s=60&v=4) BigQuery Toolkit for SAP - Replication Objects Generator
 
 
 ## Introduction
-The tools in this repo allow you generate required objects and boilerplate code for establishing a data replication pipeline from SAP into BigQuery by utilizing [ABAP SDK BigQuery Toolkit](TBD)  
+The tools in this repo allow you generate required objects and boilerplate code for establishing a data replication pipeline from SAP into BigQuery by utilizing [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-overview)  
 
 
 BigQuery Toolkit for SAP is a set of opinionated utilities, which can be used to programmatically access BigQuery resources from SAP without having to manually write code for common operations such as Table definition sync, SAP to BigQuery Data type mapping, Data chunking, Data Transfer and error handling. BigQuery Toolkit can be used within custom SAP applications such as BADIs, Enhancements, User Exists and standalone programs.
@@ -29,7 +29,7 @@ This repo includes tools designed to simplify and accelerate the process of extr
  - [1 - Installation](#1---installation)
    - [1.1 - Compatibility](#11---compatibility)
    - [1.2 - Pre-requisites](#12---pre-requisites) 
- - [2 - How to Guide](#2---usage)
+ - [2 - How to Guide](#2---how-to-guide)
    - [2.1 - CDS View Generator](#21---cds-view-generator)
    - [2.2 - Replication Objects Generator](#22---repl-obj-generator)
  - [3 - Operation Guide](#3---operations)
@@ -45,8 +45,8 @@ Tools are compatible with S/4HANA 1909 and higher.
 
 ### [1.2 - Pre-requisites](#table-of-contents)
 The following steps should be completed before using B/W Generator
-- ABAP SDK for Google Cloud On-prem or Any-cloud edition, V1.9 or higher is installed in your SAP system
-- BQ Data Transfer Configuration is completed by using Tcode /GOOG/BQTR_SETTINGS
+- [ABAP SDK for Google Cloud On-prem or Any-cloud edition](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/install-config), V1.9 or higher is installed in your SAP system
+- [BQ Data Transfer Configuration](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-configuration) is completed by using Tcode /GOOG/BQTR_SETTINGS
 
 
 ## [2 - How to Guide](#table-of-contents)
@@ -56,6 +56,7 @@ The typical user flow for utilizing the tools in this repository is as follows:
 ### [2.1 - CDS View Generator](#table-of-contents) 
 CDS View Generator program ZGOOG_R_BQTR_GEN_MASS_CDS_VIEW can be used to create delta enabled CDS View or CDS entity for transparent tables in SAP. 
 
+![alt_text](images/CDS_Gen.png "CDS Generator Screen")
 
 Input Parameters:
  ​​- Select .csv file - Enter a file that is stored in your computer. The file should contain a tab separated list with 2 columns:
@@ -84,10 +85,10 @@ The program ZGOOG_R_BQTR_GEN_REPL_OBJECTS will generate the following data repli
    - BW End Routine
  - Process Chain to auto-trigger DTP when there is a change in source data
 
+![alt_text](images/Data_Transfer_Gen.png "Data Transfer Generator Screen")
 
-Within BW Start Routine, the generated code will call the BigQuery Toolkit Data Load Class /GOOG/CL_BQTR_DATA_LOAD to load the data into BigQuery.
-Within BW End Routine, the RESULT_PACKAGE[] is cleared, ensuring no data is written to ADSO. 
-
+Within Start Routine, the generated code will call the BigQuery Toolkit Data Load Class /GOOG/CL_BQTR_DATA_LOAD to load the data into BigQuery.
+Within End Routine, the RESULT_PACKAGE[] is cleared, ensuring no data is written to ADSO. 
 
 You can run Replication Objects Generator with following input sources -
  - Selection screen: With this option, you pass the names of the parameters including the objects to be generated as selection screen parameters
