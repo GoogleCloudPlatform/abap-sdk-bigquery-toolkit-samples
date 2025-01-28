@@ -13,7 +13,7 @@ By calling the BigQuery Toolkit Data Load Class from within a Data extraction me
 
 ## Overview
 This repo includes tools designed to simplify and accelerate the process of extracting data from SAP systems and loading it into Google BigQuery by utilizing Datasources. These tools offer the following benefits -
-- Reduced Development Effort: Automates the creation of CDS views and extraction objects, saving developers significant time and effort.
+- Reduced Development Effort: Automates the creation of CDS views / entities and extraction objects, saving developers significant time and effort.
 - Simplified Data Export: Provides a streamlined mechanism for exporting data from SAP to BigQuery.
 - Increased Efficiency: Automated processes and scheduling capabilities improve the efficiency of data transfer.
 - Accelerated Time-to-Production: Reduces the overall time required to set up and deploy data pipelines from SAP to BigQuery.
@@ -32,6 +32,7 @@ This repo includes tools designed to simplify and accelerate the process of extr
  - [2 - How to Guide](#2---how-to-guide)
    - [2.1 - CDS View Generator](#21---cds-view-generator)
    - [2.2 - Replication Objects Generator](#22---repl-obj-generator)
+   - [2.3 - Demo Dynamic Load Program](#23---demo-dyn-load)
  - [3 - Operation Guide](#3---operations)
 
 
@@ -72,11 +73,11 @@ Optionally, enable the following check-boxes as needed
  - Include mandt in CDS view. If enabled, mandt field will be included in CDS View. 
 
 
-Upon running, the program will generate CDS Views specified in the file. In case of errors, they will be displayed in the output. 
+Upon running, the program will generate CDS Object specified in the file. In case of errors, they will be displayed in the output. 
 
 
 ### [2.2 - Replication Objects Generator](#table-of-contents) 
-The program ZGOOG_R_BQTR_GEN_REPL_OBJECTS will generate the following data replication objects for each CDS View specified in the input.  
+The program ZGOOG_R_BQTR_GEN_REPL_OBJECTS will generate the following data replication objects for each CDS Object specified in the input.  
  - BW (CDS) Datasource
  - Advanced Data Store Object (ADSO)
  - Data Transfer Process (DTP)
@@ -110,6 +111,11 @@ When you run the B/W Generator program, it will perform the corresponding action
 **For a demonstration of data replication from SAP to BigQuery using the BigQuery Toolkit, please see this video:** 
 
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
+
+### [2.3 - Demo Dynamic Load Program](#table-of-contents)
+The program ZGOOG_R_BQTR_DEMO_DYN_LOAD demonstrates how you can perform a direct load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
+
+![alt_text](images/Dynamic_Load_Demo.png "Dynamic Load Demo Program Screen")
 
 ## [3 - Operation Guide](#table-of-contents)
 
