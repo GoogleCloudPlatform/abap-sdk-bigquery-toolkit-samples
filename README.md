@@ -113,7 +113,7 @@ When you run the B/W Generator program, it will perform the corresponding action
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
 ### [2.3 - Demo Dynamic Load Program](#table-of-contents)
-The program ZGOOG_R_BQTR_DEMO_DYN_LOAD demonstrates how you can perform a direct load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
+The program ZGOOG_R_BQTR_DEMO_DYN_LOAD demonstrates how you can directly load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
 
 ![alt_text](images/Dynamic_Load_Demo.png "Dynamic Load Demo Program Screen")
 
