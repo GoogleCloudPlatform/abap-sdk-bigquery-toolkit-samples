@@ -107,6 +107,9 @@ As CDS Views typically do not include the Client (MANDT) field, you can generate
 
 When you run the B/W Generator program, it will perform the corresponding action entered in the selection screen and display an action log along with success or error messages. In case of errors, please review your input and perform necessary corrective actions. 
 
+**For a demonstration of data replication from SAP to BigQuery using the BigQuery Toolkit, please see this video:** 
+
+[![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
 ## [3 - Operation Guide](#table-of-contents)
 
