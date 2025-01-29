@@ -31,9 +31,9 @@ This repo includes tools designed to simplify and accelerate the process of extr
    - [1.2 - Pre-requisites](#12---pre-requisites) 
  - [2 - How to Guide](#2---how-to-guide)
    - [2.1 - CDS View Generator](#21---cds-view-generator)
-   - [2.2 - Replication Objects Generator](#22---repl-obj-generator)
-   - [2.3 - Demo Dynamic Load Program](#23---demo-dyn-load)
- - [3 - Operation Guide](#3---operations)
+   - [2.2 - Replication Objects Generator](#22---replication-objects-generator)
+   - [2.3 - Dynamic Load Program](#23---dynamic-load-program)
+ - [3 - Operations Guide](#3---operations-guide)
 
 
 ## [1 - Installation](#table-of-contents)
@@ -112,12 +112,12 @@ When you run the B/W Generator program, it will perform the corresponding action
 
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
-### [2.3 - Demo Dynamic Load Program](#table-of-contents)
+### [2.3 - Dynamic Load Program](#table-of-contents)
 The program ZGOOG_R_BQTR_DEMO_DYN_LOAD demonstrates how you can directly load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
 
 ![alt_text](images/Dynamic_Load_Demo.png "Dynamic Load Demo Program Screen")
 
-## [3 - Operation Guide](#table-of-contents)
+## [3 - Operations Guide](#table-of-contents)
 
 
 ### Data Transfer Performance
