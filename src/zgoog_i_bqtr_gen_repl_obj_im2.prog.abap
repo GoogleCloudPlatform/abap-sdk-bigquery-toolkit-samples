@@ -61,6 +61,7 @@ CLASS lcl_file_handler IMPLEMENTATION.
       CLEAR ls_data.
 
       SPLIT <ls_tab>-rec AT ',' INTO  ls_data-trkey
+                                      ls_data-dsname
                                       ls_data-cds
                                       ls_data-logsy
                                       ls_data-appl
@@ -68,7 +69,8 @@ CLASS lcl_file_handler IMPLEMENTATION.
                                       ls_data-chain
                                       ls_data-trig
                                       ls_data-info
-                                      ls_data-mfnam.
+                                      ls_data-mfnam
+                                      ls_data-active.
       APPEND ls_data TO ct_table.
 
     ENDLOOP.
@@ -112,15 +114,17 @@ CLASS lcl_file_handler IMPLEMENTATION.
 
   METHOD download_template.
     TYPES: BEGIN OF lty_template,
-             trkey TYPE string,
-             cds   TYPE string,
-             logsy TYPE string,
-             appl  TYPE string,
-             adso  TYPE string,
-             chain TYPE string,
-             trig  TYPE string,
-             info  TYPE string,
-             mfnam TYPE string,
+             trkey  TYPE string,
+             dsnam  TYPE string,
+             cds    TYPE string,
+             logsy  TYPE string,
+             appl   TYPE string,
+             adso   TYPE string,
+             chain  TYPE string,
+             trig   TYPE string,
+             info   TYPE string,
+             mfnam  TYPE string,
+             active TYPE string,
            END OF lty_template.
     DATA: lv_file     TYPE string,
           lv_csv_file TYPE rlgrap-filename,
@@ -129,6 +133,7 @@ CLASS lcl_file_handler IMPLEMENTATION.
           lt_template TYPE STANDARD TABLE OF lty_template.
 
     ls_template-trkey = 'Transfer Key'.
+    ls_template-dsnam = 'Datasource name'.
     ls_template-cds   = 'CDS View Name'.
     ls_template-logsy = 'Logical System'.
     ls_template-appl  = 'Application Component'.
@@ -137,6 +142,7 @@ CLASS lcl_file_handler IMPLEMENTATION.
     ls_template-trig  = 'Trigger Name'.
     ls_template-info  = 'Infoarea'.
     ls_template-mfnam = 'MANDT Field Name'.
+    ls_template-active = 'Activate Process chain'.
 
     APPEND ls_template TO lt_template.
 

@@ -20,6 +20,7 @@ CLASS lcl_tool IMPLEMENTATION.
 
     IF p_psel = abap_true.
       ls_data-trkey = p_trkey.
+      ls_data-dsname = p_dsnam.
       ls_data-cds   = p_cds.
       ls_data-logsy = p_logsy.
       ls_data-appl  = p_appl.
@@ -27,6 +28,7 @@ CLASS lcl_tool IMPLEMENTATION.
       ls_data-chain = p_chain.
       ls_data-trig  = p_trig.
       ls_data-info  = p_info.
+      ls_data-active = p_activ.
       IF p_mandt = abap_true.
         ls_data-mfnam = p_mfnam.
       ENDIF.
@@ -56,7 +58,8 @@ CLASS lcl_tool IMPLEMENTATION.
     lv_ds_name = iv_cds.
     zgoog_cl_bqtr_gen_bw_object=>create_bw_ds(
       EXPORTING
-        iv_name     = lv_ds_name
+        iv_cds_odp  = lv_ds_name
+        iv_dsnam    = iv_dsname
         iv_logsys   = iv_logsy
         iv_applnm   = iv_appl
       IMPORTING
@@ -68,7 +71,7 @@ CLASS lcl_tool IMPLEMENTATION.
 
     add_status( iv_cds         = iv_cds
                 iv_description = 'BW Data Source'
-                iv_value       = lv_ds_name
+                iv_value       = |{ iv_dsname } with ODP Provider { lv_ds_name } |
                 it_return      = lt_return ).
 
     IF ls_tlogo_ds IS NOT INITIAL.
@@ -145,7 +148,7 @@ CLASS lcl_tool IMPLEMENTATION.
                 EXPORTING
                   iv_chain    = iv_chain
                   iv_infoara  = iv_info
-*                 iv_streaming = abap_true
+                  iv_active   = iv_active
                   iv_trigger  = CONV #( iv_trig )
                   iv_dtp_load = CONV #( lv_dtp )
                   iv_adso     = CONV #( ls_tlogo_adso-objnm )
@@ -207,7 +210,7 @@ CLASS lcl_tool IMPLEMENTATION.
     IF p_sbwds = abap_true OR p_sall = abap_true.
       zgoog_cl_bqtr_gen_bw_object=>delete_bw_ds(
         EXPORTING
-          iv_name     = CONV #( iv_cds )
+          iv_name     = CONV #( iv_dsname )
           iv_logsys   = iv_logsy
         IMPORTING
           ev_sy_subrc = lv_sy_subrc
@@ -346,25 +349,28 @@ CLASS lcl_tool IMPLEMENTATION.
     get_data( ).
     LOOP AT mt_data ASSIGNING <ls_data>.
       IF p_clean = abap_true.
-        cleanup( iv_trkey = <ls_data>-trkey
-                 iv_cds   = <ls_data>-cds
-                 iv_logsy = <ls_data>-logsy
-                 iv_appl  = <ls_data>-appl
-                 iv_adso  = <ls_data>-adso
-                 iv_chain = <ls_data>-chain
-                 iv_trig  = <ls_data>-trig
-                 iv_info  = <ls_data>-info
+        cleanup( iv_trkey  = <ls_data>-trkey
+                 iv_dsname = <ls_data>-dsname
+                 iv_cds    = <ls_data>-cds
+                 iv_logsy  = <ls_data>-logsy
+                 iv_appl   = <ls_data>-appl
+                 iv_adso   = <ls_data>-adso
+                 iv_chain  = <ls_data>-chain
+                 iv_trig   = <ls_data>-trig
+                 iv_info   = <ls_data>-info
                  ).
       ELSE.
-        create( iv_trkey = <ls_data>-trkey
-                iv_cds   = <ls_data>-cds
-                iv_logsy = <ls_data>-logsy
-                iv_appl  = <ls_data>-appl
-                iv_adso  = <ls_data>-adso
-                iv_chain = <ls_data>-chain
-                iv_trig  = <ls_data>-trig
-                iv_info  = <ls_data>-info
-                iv_mfnam = <ls_data>-mfnam
+        create( iv_trkey  = <ls_data>-trkey
+                iv_dsname = <ls_data>-dsname
+                iv_cds    = <ls_data>-cds
+                iv_logsy  = <ls_data>-logsy
+                iv_appl   = <ls_data>-appl
+                iv_adso   = <ls_data>-adso
+                iv_chain  = <ls_data>-chain
+                iv_trig   = <ls_data>-trig
+                iv_info   = <ls_data>-info
+                iv_mfnam  = <ls_data>-mfnam
+                iv_active = <ls_data>-active
                 ).
       ENDIF.
     ENDLOOP.

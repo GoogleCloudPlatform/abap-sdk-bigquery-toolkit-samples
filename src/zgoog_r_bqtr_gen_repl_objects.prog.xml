@@ -12,6 +12,12 @@
    <TPOOL>
     <item>
      <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>This will immediately start the replication job scheduled to run every minute.</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
      <KEY>T01</KEY>
      <ENTRY>Select Action</ENTRY>
      <LENGTH>16</LENGTH>
@@ -43,13 +49,19 @@
     <item>
      <ID>I</ID>
      <KEY>T06</KEY>
-     <ENTRY>Object Directory</ENTRY>
+     <ENTRY>Additional Options</ENTRY>
      <LENGTH>60</LENGTH>
     </item>
     <item>
      <ID>R</ID>
      <ENTRY>BigQuery Replication Objects Generator</ENTRY>
      <LENGTH>38</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_ACTIV</KEY>
+     <ENTRY>Activate Process chain</ENTRY>
+     <LENGTH>30</LENGTH>
     </item>
     <item>
      <ID>S</ID>
@@ -92,16 +104,15 @@
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_DEVC</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
-     <SPLIT>D</SPLIT>
-    </item>
-    <item>
-     <ID>S</ID>
      <KEY>P_DPATH</KEY>
      <ENTRY>Download Directory Path</ENTRY>
      <LENGTH>31</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_DSNAM</KEY>
+     <ENTRY>BW Data Source Name</ENTRY>
+     <LENGTH>27</LENGTH>
     </item>
     <item>
      <ID>S</ID>
@@ -194,13 +205,6 @@
      <KEY>P_STRNF</KEY>
      <ENTRY>Data Transfer</ENTRY>
      <LENGTH>21</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_TR</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
-     <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>

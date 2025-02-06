@@ -42,12 +42,16 @@ SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-t02.
 SELECTION-SCREEN END OF BLOCK b2.
 
 SELECTION-SCREEN BEGIN OF BLOCK b6 WITH FRAME TITLE TEXT-t06.
-  PARAMETERS: p_mandt AS CHECKBOX USER-COMMAND uc2 DEFAULT 'X',
-              p_mfnam TYPE name_feld MODIF ID m01 DEFAULT 'MANDT'.
+  PARAMETERS: p_mandt AS CHECKBOX MODIF ID m02 USER-COMMAND uc2 DEFAULT 'X',
+              p_mfnam TYPE name_feld MODIF ID m01 DEFAULT 'MANDT',
+              p_activ AS CHECKBOX MODIF ID m02 USER-COMMAND uc2 DEFAULT 'X'.
+  SELECTION-SCREEN COMMENT /01(79) TEXT-001  MODIF ID m02.
+
 SELECTION-SCREEN END OF BLOCK b6.
 
 SELECTION-SCREEN BEGIN OF BLOCK b3 WITH FRAME TITLE TEXT-t03.
   PARAMETERS: p_trkey TYPE /goog/trkey MODIF ID lc1 MATCHCODE OBJECT /goog/sh_bqtr_transf_key,
+              p_dsnam TYPE rsoltpsourcer MODIF ID bds MATCHCODE OBJECT rsds_datasource,
               p_cds   TYPE ddlname MODIF ID cds MATCHCODE OBJECT rsds_datasource,
               p_logsy TYPE rsslogsys MODIF ID lc1,
               p_appl  TYPE rsapplnm MODIF ID apl,
@@ -127,6 +131,9 @@ AT SELECTION-SCREEN OUTPUT.
           screen-input = 0.
           screen-invisible = 1.
         ENDIF.
+      ELSEIF screen-group1 = 'M01' OR screen-group1 = 'M02'.
+        screen-input     = 0.
+        screen-invisible = 1.
       ENDIF.
     ELSEIF p_create = abap_true.
       IF screen-name CS 'P_S'.

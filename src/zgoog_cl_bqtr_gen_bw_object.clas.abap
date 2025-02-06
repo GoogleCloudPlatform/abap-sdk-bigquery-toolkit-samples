@@ -31,9 +31,10 @@ public section.
 
   class-methods CREATE_BW_DS
     importing
-      !IV_NAME type STRING
+      !IV_CDS_ODP type STRING
       !IV_LOGSYS type RSSLOGSYS
       !IV_APPLNM type RSAPPLNM
+      !IV_DSNAM type RSOLTPSOURCER
     exporting
       !ES_TLOGO type T_TLOGO
       !EV_SY_SUBRC type SYST_SUBRC
@@ -75,6 +76,7 @@ public section.
       !IV_TRIGGER type STRING optional
       !IV_DTP_LOAD type STRING
       !IV_ADSO type STRING
+      !IV_ACTIVE type BOOLEAN default ABAP_TRUE
     exporting
       !EV_SY_SUBRC type SYST_SUBRC
       !ET_RETURN type BAPIRET2_T .
@@ -453,11 +455,9 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       lx_err_msg     TYPE REF TO cx_rs_error_with_message,
       lx_root        TYPE REF TO cx_root.
 
-    FIELD-SYMBOLS:
-                   <ls_msg> TYPE bal_s_msg.
+    FIELD-SYMBOLS: <ls_msg> TYPE bal_s_msg.
 
     DATA: lv_logsys_exists TYPE flag.
-
 
 
     CLEAR: et_return, ev_sy_subrc.
@@ -473,12 +473,12 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    lv_data_source = iv_name.
+    lv_data_source = iv_cds_odp.
 
     DATA: lv_search_pattern TYPE rodps_odpname.
     DATA: lt_nodes TYPE rodps_repl_t_node.
 
-    lv_search_pattern = iv_name && '*'.
+    lv_search_pattern = iv_cds_odp && '*'.
     CALL METHOD cl_rsds_access_odp=>rodps_repl_odp_get_list
       EXPORTING
         i_logsys             = iv_logsys
@@ -500,7 +500,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
 
     DATA: ls_node TYPE REF TO rodps_repl_s_node.
     READ TABLE lt_nodes REFERENCE INTO ls_node
-    WITH KEY display_name = iv_name.
+    WITH KEY display_name = iv_cds_odp.
     IF sy-subrc IS NOT INITIAL.
       ev_sy_subrc = 4.
       APPEND VALUE #( id         = '/GOOG/BQTR'
@@ -513,7 +513,8 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    lv_odpname = ls_node->nodename.
+    lv_odpname     = ls_node->nodename.
+    lv_data_source = iv_dsnam.
 
     CALL METHOD cl_rsds_access_odp=>if_rsds_attributes_maintain~init
       EXPORTING
@@ -811,9 +812,6 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-*
-*
-*    DATA: lt_process_data TYPE rspc_t_variante.
     DATA: lt_process_data TYPE rspc_t_variante,
           lv_trigger      TYPE string.
 *
@@ -963,21 +961,22 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-
-    lo_chain->activate(
-      IMPORTING
-        e_t_conflicts = DATA(lt_co)                 " List of Processes causing Problems during Scheduling
-      EXCEPTIONS
-        errors        = 1                " Errors occurred
-        warnings      = 2                " Warnings occurred
-        OTHERS        = 3
-    ).
-    IF sy-subrc <> 0.
-      ev_sy_subrc = sy-subrc.
-      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
-        CHANGING
-          ct_bapiret2 = et_return ).
-      RETURN.
+    IF iv_active = abap_true.
+      lo_chain->activate(
+        IMPORTING
+          e_t_conflicts = DATA(lt_co)
+        EXCEPTIONS
+          errors        = 1                " Errors occurred
+          warnings      = 2                " Warnings occurred
+          OTHERS        = 3
+      ).
+      IF sy-subrc <> 0.
+        ev_sy_subrc = sy-subrc.
+        /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+      ENDIF.
     ENDIF.
 
   ENDMETHOD.
