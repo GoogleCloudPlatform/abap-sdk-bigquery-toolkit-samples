@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>ZBQTR_DEMO_SEND_DATA_TO_BQ</NAME>
+    <NAME>ZGOOG_R_BQTR_EX_SEND_DATA_BQ</NAME>
     <SUBC>1</SUBC>
     <RLOAD>E</RLOAD>
     <FIXPT>X</FIXPT>
