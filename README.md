@@ -1,5 +1,6 @@
 # ![Google Cloud](https://avatars.githubusercontent.com/u/2810941?s=60&v=4) BigQuery Toolkit for SAP - Replication Objects Generator
 
+> 📢 🚀[Annoucing Archive to BigQuery feature, powered by BigQuery Toolkit for SAP](#archive-to-bigquery) 
 
 ## Introduction
 The tools in this repo allow you generate required objects and boilerplate code for establishing a data replication pipeline from SAP into BigQuery by utilizing [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-overview)  
@@ -32,7 +33,8 @@ This repo includes tools designed to simplify and accelerate the process of extr
  - [2 - How to Guide](#2---how-to-guide)
    - [2.1 - CDS View Generator](#21---cds-view-generator)
    - [2.2 - Replication Objects Generator](#22---replication-objects-generator)
-   - [2.3 - Dynamic Load Program](#23---dynamic-load-program)
+   - [2.3 - Legacy Replication Objects Generator](#23---legacy-replication-objects-generator)
+   - [2.4 - Dynamic Load Program](#23---dynamic-load-program)
  - [3 - Operations Guide](#3---operations-guide)
 
 
@@ -112,7 +114,12 @@ When you run the B/W Generator program, it will perform the corresponding action
 
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
-### [2.3 - Dynamic Load Program](#table-of-contents)
+### [2.3 - Legacy Replication Objects Generator](#table-of-contents) 
+You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG to generate replication objects for ODP SAPI and CDS Extractors in legacy systems such as SAP ECC. 
+
+![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
+
+### [2.4 - Dynamic Load Program](#table-of-contents)
 The program ZGOOG_R_BQTR_DEMO_DYN_LOAD demonstrates how you can directly load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
 
 ![alt_text](images/Dynamic_Load_Demo.png "Dynamic Load Demo Program Screen")
