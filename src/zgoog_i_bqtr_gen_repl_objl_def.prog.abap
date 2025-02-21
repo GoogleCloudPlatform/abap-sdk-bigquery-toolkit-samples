@@ -22,15 +22,18 @@ CLASS lcl_tool DEFINITION.
     CLASS-METHODS run.
 
     TYPES: BEGIN OF mty_data,
-             trkey TYPE /goog/trkey,
-             cds   TYPE ddlname,
-             logsy TYPE rsslogsys,
-             appl  TYPE rsapplnm,
-             adso  TYPE char9,
-             chain TYPE rspc_chain,
-             trig  TYPE rspc_variant,
-             info  TYPE rsinfoarea,
-             mfnam TYPE name_feld,
+             trkey  TYPE /goog/trkey,
+             dsname TYPE rsoltpsourcer,
+             ds     TYPE ddlname,
+             logsy  TYPE rsslogsys,
+             appl   TYPE rsapplnm,
+             odso   TYPE char9,
+             iobj   TYPE RSIOBJNM,
+             chain  TYPE rspc_chain,
+             trig   TYPE rspc_variant,
+             info   TYPE rsinfoarea,
+             mfnam  TYPE name_feld,
+             active TYPE boolean,
            END OF mty_data,
            mtt_data TYPE STANDARD TABLE OF mty_data WITH NON-UNIQUE DEFAULT KEY.
 
@@ -47,30 +50,35 @@ CLASS lcl_tool DEFINITION.
     CLASS-DATA: mt_output TYPE STANDARD TABLE OF mty_output,
                 mt_data   TYPE STANDARD TABLE OF mty_data.
 
-    CLASS-METHODS cleanup IMPORTING iv_trkey TYPE /goog/trkey
-                                    iv_cds   TYPE ddlname
-                                    iv_logsy TYPE rsslogsys
-                                    iv_appl  TYPE rsapplnm
-                                    iv_adso  TYPE char9
-                                    iv_chain TYPE rspc_chain
-                                    iv_trig  TYPE rspc_variant
-                                    iv_info  TYPE rsinfoarea.
+    CLASS-METHODS cleanup IMPORTING iv_trkey  TYPE /goog/trkey
+                                    iv_dsname TYPE rsoltpsourcer
+                                    iv_ds     TYPE ddlname OPTIONAL
+                                    iv_iobj   TYPE rsiobjnm
+                                    iv_logsy  TYPE rsslogsys
+                                    iv_appl   TYPE rsapplnm
+                                    iv_Odso   TYPE char9
+                                    iv_chain  TYPE rspc_chain
+                                    iv_trig   TYPE rspc_variant
+                                    iv_info   TYPE rsinfoarea.
 
-    CLASS-METHODS create IMPORTING iv_trkey TYPE /goog/trkey
-                                   iv_cds   TYPE ddlname
-                                   iv_logsy TYPE rsslogsys
-                                   iv_appl  TYPE rsapplnm
-                                   iv_adso  TYPE char9
-                                   iv_chain TYPE rspc_chain
-                                   iv_trig  TYPE rspc_variant
-                                   iv_info  TYPE rsinfoarea
-                                   iv_mfnam TYPE name_feld.
+    CLASS-METHODS create IMPORTING iv_trkey  TYPE /goog/trkey
+                                   iv_dsname TYPE rsoltpsourcer
+                                   iv_ds     TYPE ddlname
+                                   iv_iobj   TYPE rsiobjnm
+                                   iv_logsy  TYPE rsslogsys
+                                   iv_appl   TYPE rsapplnm
+                                   iv_odso   TYPE char9
+                                   iv_chain  TYPE rspc_chain
+                                   iv_trig   TYPE rspc_variant
+                                   iv_info   TYPE rsinfoarea
+                                   iv_active TYPE boolean
+                                   iv_mfnam  TYPE name_feld.
 
     CLASS-METHODS display.
 
     CLASS-METHODS get_data.
 
-    CLASS-METHODS add_status IMPORTING iv_cds         TYPE ddlname
+    CLASS-METHODS add_status IMPORTING iv_ds          TYPE ddlname
                                        iv_description TYPE string
                                        iv_value       TYPE string
                                        iv_category    TYPE c DEFAULT 'C'

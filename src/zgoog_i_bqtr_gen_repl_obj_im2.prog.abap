@@ -62,7 +62,7 @@ CLASS lcl_file_handler IMPLEMENTATION.
 
       SPLIT <ls_tab>-rec AT ',' INTO  ls_data-trkey
                                       ls_data-dsname
-                                      ls_data-cds
+                                      ls_data-ds
                                       ls_data-logsy
                                       ls_data-appl
                                       ls_data-adso

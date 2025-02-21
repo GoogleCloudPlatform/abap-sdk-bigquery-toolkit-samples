@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>ZGOOG_R_BQTR_GEN_REPL_OBJECTS</NAME>
+    <NAME>ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG</NAME>
     <SUBC>1</SUBC>
     <RLOAD>E</RLOAD>
     <FIXPT>X</FIXPT>
@@ -53,9 +53,15 @@
      <LENGTH>60</LENGTH>
     </item>
     <item>
+     <ID>I</ID>
+     <KEY>T07</KEY>
+     <ENTRY>Datasource Selection</ENTRY>
+     <LENGTH>20</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
-     <ENTRY>BigQuery Replication Objects Generator - CDS</ENTRY>
-     <LENGTH>44</LENGTH>
+     <ENTRY>BigQuery Replication Objects Generator - Legacy (SAPI &amp; CDS)</ENTRY>
+     <LENGTH>60</LENGTH>
     </item>
     <item>
      <ID>S</ID>
@@ -66,7 +72,7 @@
     <item>
      <ID>S</ID>
      <KEY>P_ADSO</KEY>
-     <ENTRY>ADSO name</ENTRY>
+     <ENTRY>ODSO name</ENTRY>
      <LENGTH>17</LENGTH>
     </item>
     <item>
@@ -123,6 +129,13 @@
     </item>
     <item>
      <ID>S</ID>
+     <KEY>P_IOBJ</KEY>
+     <ENTRY>.</ENTRY>
+     <LENGTH>9</LENGTH>
+     <SPLIT>D</SPLIT>
+    </item>
+    <item>
+     <ID>S</ID>
      <KEY>P_LOGSY</KEY>
      <ENTRY>.</ENTRY>
      <LENGTH>9</LENGTH>
@@ -139,6 +152,13 @@
      <KEY>P_MFNAM</KEY>
      <ENTRY>Field Name for Mandt</ENTRY>
      <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_ODP</KEY>
+     <ENTRY>.</ENTRY>
+     <LENGTH>9</LENGTH>
+     <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
@@ -166,8 +186,20 @@
     </item>
     <item>
      <ID>S</ID>
+     <KEY>P_RAPI</KEY>
+     <ENTRY>S-API Extractor</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_RCDS</KEY>
+     <ENTRY>DDL Source</ENTRY>
+     <LENGTH>18</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
      <KEY>P_SADSO</KEY>
-     <ENTRY>ADSO</ENTRY>
+     <ENTRY>ODSO</ENTRY>
      <LENGTH>12</LENGTH>
     </item>
     <item>

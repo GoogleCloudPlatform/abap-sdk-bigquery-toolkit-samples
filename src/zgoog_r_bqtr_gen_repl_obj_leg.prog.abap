@@ -12,6 +12,13 @@
 *  See the License for the specific language governing permissions   *
 *  and limitations under the License.                                *
 **********************************************************************
-REPORT /goog/r_bqtr_gen_bw_objects.
 
-INCLUDE zgoog_i_bqtr_gen_bw_obj_def.
+INCLUDE zgoog_i_bqtr_gen_repl_objl_top.
+INCLUDE zgoog_i_bqtr_gen_repl_objl_sel.
+INCLUDE zgoog_i_bqtr_gen_repl_objl_im1.
+INCLUDE zgoog_i_bqtr_gen_repl_objl_im2.
+INCLUDE zgoog_i_bqtr_gen_repl_objl_im3.
+
+START-OF-SELECTION.
+
+  lcl_tool=>run( ).

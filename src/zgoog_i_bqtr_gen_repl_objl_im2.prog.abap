@@ -61,14 +61,17 @@ CLASS lcl_file_handler IMPLEMENTATION.
       CLEAR ls_data.
 
       SPLIT <ls_tab>-rec AT ',' INTO  ls_data-trkey
-                                      ls_data-cds
+                                      ls_data-dsname
+                                      ls_data-ds
                                       ls_data-logsy
                                       ls_data-appl
-                                      ls_data-adso
+                                      ls_data-iobj
+                                      ls_data-odso
                                       ls_data-chain
                                       ls_data-trig
                                       ls_data-info
-                                      ls_data-mfnam.
+                                      ls_data-mfnam
+                                      ls_data-active.
       APPEND ls_data TO ct_table.
 
     ENDLOOP.
@@ -112,15 +115,18 @@ CLASS lcl_file_handler IMPLEMENTATION.
 
   METHOD download_template.
     TYPES: BEGIN OF lty_template,
-             trkey TYPE string,
-             cds   TYPE string,
-             logsy TYPE string,
-             appl  TYPE string,
-             adso  TYPE string,
-             chain TYPE string,
-             trig  TYPE string,
-             info  TYPE string,
-             mfnam TYPE string,
+             trkey  TYPE string,
+             dsnam  TYPE string,
+             ds     TYPE string,
+             logsy  TYPE string,
+             appl   TYPE string,
+             odso   TYPE string,
+             iobj   TYPE string,
+             chain  TYPE string,
+             trig   TYPE string,
+             info   TYPE string,
+             mfnam  TYPE string,
+             active TYPE string,
            END OF lty_template.
     DATA: lv_file     TYPE string,
           lv_csv_file TYPE rlgrap-filename,
@@ -129,19 +135,22 @@ CLASS lcl_file_handler IMPLEMENTATION.
           lt_template TYPE STANDARD TABLE OF lty_template.
 
     ls_template-trkey = 'Transfer Key'.
-    ls_template-cds   = 'CDS View Name'.
+    ls_template-dsnam = 'BW Datasource Name'.
+    ls_template-ds    = 'Datasource (ODP  Object) Name'.
     ls_template-logsy = 'Logical System'.
     ls_template-appl  = 'Application Component'.
-    ls_template-adso  = 'ADSO Name'.
+    ls_template-odso  = 'ODSO Name'.
+    ls_template-iobj  = 'InfoObject Name'.
     ls_template-chain = 'Process Chain Name'.
     ls_template-trig  = 'Trigger Name'.
     ls_template-info  = 'Infoarea'.
     ls_template-mfnam = 'MANDT Field Name'.
+    ls_template-active = 'Activate Process chain'.
 
     APPEND ls_template TO lt_template.
 
     DATA: lt_csv_converted_table TYPE truxs_t_text_data.
-    lv_csv_file = p_dpath && '\' && 'bw_gen_template.csv'.
+    lv_csv_file = p_dpath && '\' && 'bw_gen_template_legacy.csv'.
 
     DATA: lv_csv_line TYPE c LENGTH 4096.
 

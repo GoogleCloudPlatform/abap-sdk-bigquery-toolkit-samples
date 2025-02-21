@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>ZGOOG_I_BQTR_GEN_BW_OBJ_TOP</NAME>
+    <NAME>ZGOOG_I_BQTR_GEN_REPL_OBJL_SEL</NAME>
     <SUBC>I</SUBC>
     <RLOAD>E</RLOAD>
     <UCCHECK>X</UCCHECK>
@@ -11,7 +11,7 @@
    <TPOOL>
     <item>
      <ID>R</ID>
-     <ENTRY>Include /GOOG/I_BQTR_GEN_BW_OBJ_TOP</ENTRY>
+     <ENTRY>Include ZGOOG_I_BQTR_GEN_BW_OBJ_SEL</ENTRY>
      <LENGTH>35</LENGTH>
     </item>
    </TPOOL>

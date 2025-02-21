@@ -42,16 +42,28 @@ SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-t02.
 SELECTION-SCREEN END OF BLOCK b2.
 
 SELECTION-SCREEN BEGIN OF BLOCK b6 WITH FRAME TITLE TEXT-t06.
-  PARAMETERS: p_mandt AS CHECKBOX USER-COMMAND uc2 DEFAULT 'X',
-              p_mfnam TYPE name_feld MODIF ID m01 DEFAULT 'MANDT'.
+  PARAMETERS: p_mandt AS CHECKBOX MODIF ID m02 USER-COMMAND uc2 DEFAULT 'X',
+              p_mfnam TYPE name_feld MODIF ID m01 DEFAULT 'MANDT',
+              p_activ AS CHECKBOX MODIF ID m02 USER-COMMAND uc2 DEFAULT 'X'.
+  SELECTION-SCREEN COMMENT /01(79) TEXT-001  MODIF ID m02.
+
 SELECTION-SCREEN END OF BLOCK b6.
+
+SELECTION-SCREEN BEGIN OF BLOCK b7 WITH FRAME TITLE TEXT-t07.
+  PARAMETERS: p_rcds RADIOBUTTON GROUP rb7 USER-COMMAND uc1 DEFAULT 'X'  MODIF ID dsr,
+              p_rapi RADIOBUTTON GROUP rb7  MODIF ID dsr.
+
+  PARAMETERS: p_cds   TYPE ddlname MODIF ID cds MATCHCODE OBJECT rsds_datasource.
+  PARAMETERS: p_odp  TYPE rsiodynp4-oltpsource MODIF ID odp.
+SELECTION-SCREEN END OF BLOCK b7.
 
 SELECTION-SCREEN BEGIN OF BLOCK b3 WITH FRAME TITLE TEXT-t03.
   PARAMETERS: p_trkey TYPE /goog/trkey MODIF ID lc1 MATCHCODE OBJECT /goog/sh_bqtr_transf_key,
-              p_cds   TYPE ddlname MODIF ID cds MATCHCODE OBJECT rsds_datasource,
+              p_dsnam TYPE rsoltpsourcer MODIF ID bds MATCHCODE OBJECT rsds_datasource,
               p_logsy TYPE rsslogsys MODIF ID lc1,
               p_appl  TYPE rsapplnm MODIF ID apl,
               p_adso  TYPE char9 MODIF ID ads MATCHCODE OBJECT rsoadso_search,
+              p_iobj  TYPE rsiobjnm MODIF ID iob,
               p_chain TYPE rspc_chain MODIF ID cha,
               p_trig  TYPE rspc_variant MODIF ID tri,
               p_info  TYPE rsinfoarea MODIF ID inf MATCHCODE OBJECT rsshapdia.
@@ -93,7 +105,8 @@ AT SELECTION-SCREEN OUTPUT.
       ENDIF.
     ELSE.
       CASE screen-group1.
-        WHEN 'LC1' OR 'CDS' OR 'APL' OR 'ADS' OR 'CHA' OR 'TRI' OR 'INF'.
+        WHEN 'LC1' OR 'BDS' OR 'CDS' OR 'APL' OR 'ADS' OR
+             'CHA' OR 'TRI' OR 'INF' OR 'ODP' OR 'DSR' OR 'IOB'.
           screen-input     = 0.
           screen-invisible = 1.
       ENDCASE.
@@ -127,11 +140,28 @@ AT SELECTION-SCREEN OUTPUT.
           screen-input = 0.
           screen-invisible = 1.
         ENDIF.
+      ELSEIF screen-group1 = 'M01' OR screen-group1 = 'M02'.
+        screen-input     = 0.
+        screen-invisible = 1.
       ENDIF.
     ELSEIF p_create = abap_true.
       IF screen-name CS 'P_S'.
         screen-input = 0.
         screen-invisible = 1.
+      ENDIF.
+    ENDIF.
+
+    IF p_psel IS NOT INITIAL.
+      IF p_rcds IS INITIAL.
+        IF screen-group1 = 'CDS'.
+          screen-input     = 0.
+          screen-invisible = 1.
+        ENDIF.
+      ELSE.
+        IF screen-group1 = 'ODP'.
+          screen-input     = 0.
+          screen-invisible = 1.
+        ENDIF.
       ENDIF.
     ENDIF.
 
@@ -151,7 +181,7 @@ AT SELECTION-SCREEN OUTPUT.
         screen-invisible = 1.
       ENDIF.
     ELSEIF p_sbwds IS NOT INITIAL.
-      IF p_clean = abap_true AND NOT ( screen-group1 = 'CDS' OR screen-group1 IS INITIAL ).
+      IF p_clean = abap_true AND NOT ( screen-group1 = 'BDS' OR screen-group1 IS INITIAL ).
         screen-input     = 0.
         screen-invisible = 1.
       ENDIF.

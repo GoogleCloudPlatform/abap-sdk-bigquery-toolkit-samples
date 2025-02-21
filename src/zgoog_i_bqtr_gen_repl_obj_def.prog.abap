@@ -24,7 +24,7 @@ CLASS lcl_tool DEFINITION.
     TYPES: BEGIN OF mty_data,
              trkey  TYPE /goog/trkey,
              dsname TYPE rsoltpsourcer,
-             cds    TYPE ddlname,
+             ds     TYPE ddlname,
              logsy  TYPE rsslogsys,
              appl   TYPE rsapplnm,
              adso   TYPE char9,
@@ -51,7 +51,7 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS cleanup IMPORTING iv_trkey  TYPE /goog/trkey
                                     iv_dsname TYPE rsoltpsourcer
-                                    iv_cds    TYPE ddlname OPTIONAL
+                                    iv_ds    TYPE ddlname OPTIONAL
                                     iv_logsy  TYPE rsslogsys
                                     iv_appl   TYPE rsapplnm
                                     iv_adso   TYPE char9
@@ -61,7 +61,7 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS create IMPORTING iv_trkey  TYPE /goog/trkey
                                    iv_dsname TYPE rsoltpsourcer
-                                   iv_cds    TYPE ddlname
+                                   iv_ds     TYPE ddlname
                                    iv_logsy  TYPE rsslogsys
                                    iv_appl   TYPE rsapplnm
                                    iv_adso   TYPE char9
@@ -75,7 +75,7 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS get_data.
 
-    CLASS-METHODS add_status IMPORTING iv_cds         TYPE ddlname
+    CLASS-METHODS add_status IMPORTING iv_ds         TYPE ddlname
                                        iv_description TYPE string
                                        iv_value       TYPE string
                                        iv_category    TYPE c DEFAULT 'C'

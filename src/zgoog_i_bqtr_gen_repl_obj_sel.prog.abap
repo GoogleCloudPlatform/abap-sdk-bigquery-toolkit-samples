@@ -97,7 +97,7 @@ AT SELECTION-SCREEN OUTPUT.
       ENDIF.
     ELSE.
       CASE screen-group1.
-        WHEN 'LC1' OR 'CDS' OR 'APL' OR 'ADS' OR 'CHA' OR 'TRI' OR 'INF'.
+        WHEN 'LC1' OR 'BDS' OR 'CDS' OR 'APL' OR 'ADS' OR 'CHA' OR 'TRI' OR 'INF'.
           screen-input     = 0.
           screen-invisible = 1.
       ENDCASE.

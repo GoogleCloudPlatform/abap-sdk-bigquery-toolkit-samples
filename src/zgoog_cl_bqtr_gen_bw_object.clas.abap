@@ -25,13 +25,15 @@ public section.
         objnm   TYPE sobj_name,
         subtype TYPE rso_tlogo_subtype,
         odpname TYPE rodps_odpname,
+        object  TYPE sobj_name,
+        updmode TYPE  rsbupdmode,
       END OF t_tlogo .
 
   class-data MV_OBJVER type RSOBJVERS value 'M' ##NO_TEXT.
 
   class-methods CREATE_BW_DS
     importing
-      !IV_CDS_ODP type STRING
+      !IV_DS type STRING
       !IV_LOGSYS type RSSLOGSYS
       !IV_APPLNM type RSAPPLNM
       !IV_DSNAM type RSOLTPSOURCER
@@ -120,6 +122,48 @@ public section.
     exporting
       !EV_SY_SUBRC type SYST_SUBRC
       !ET_RETURN type BAPIRET2_T .
+  class-methods CREATE_ODSO
+    importing
+      !IV_ADSONM type RSOADSONM
+      !IV_IOBJ type RSIOBJNM
+      !IV_ODPNAME type RODPS_ODPNAME
+      !IV_LOGSYS type RSSLOGSYS
+    exporting
+      !ES_TLOGO type T_TLOGO
+      !EV_SY_SUBRC type SYST_SUBRC
+      !ET_RETURN type BAPIRET2_T .
+  class-methods DELETE_ODSO
+    importing
+      !IV_ADSONM type RSOADSONM
+      !IV_IOBJ type RSIOBJNM
+    exporting
+      !EV_SY_SUBRC type SYST_SUBRC
+      !ET_RETURN type BAPIRET2_T .
+  class-methods CREATE_TRNF_ODSO
+    importing
+      !IV_MASS_TR_KEY type /GOOG/TRKEY
+      !IV_DATA_SOURCE type STRING
+      !IV_IOBJ type RSIOBJNM
+      !IV_TLOGO_DS type T_TLOGO
+      !IV_TLOGO_ADSO type T_TLOGO
+      !IV_MANDT_FVAL type NAME_FELD optional
+    exporting
+      !ES_TLOGO type T_TLOGO
+      !EV_SY_SUBRC type SYST_SUBRC
+      !ET_RETURN type BAPIRET2_T .
+  class-methods ADD_TRNF_MAP_ODSO
+    importing
+      !IV_IOBJ type RSIOBJNM
+      !IO_TRFN type ref to CL_RSTRAN_TRFN .
+  class-methods CREATE_DTP_LEGACY
+    importing
+      !IV_TLOGO_DS type T_TLOGO
+      !IV_TLOGO_ADSO type T_TLOGO
+      !IV_TLOGO_TRNF type T_TLOGO
+    exporting
+      !EV_DTPNM type RSBKDTPNM
+      !EV_SY_SUBRC type SYST_SUBRC
+      !ET_RETURN type BAPIRET2_T .
   PROTECTED SECTION.
 private section.
 
@@ -138,11 +182,12 @@ private section.
       !IV_LOGSYS type RSSLOGSYS
     exporting
       !EV_EXIST type ABAP_BOOL
+      !EV_CONTEXT type RODPS_CONTEXT
       !EV_SY_SUBRC type SYST_SUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods ADD_BAPIRET2_FROM_RS_ERROR
     importing
-      !IO_RS_ERROR type ref to CX_RS_ERROR_WITH_MESSAGE
+      !IO_RS_ERROR type ref to CX_RS_ERROR
     changing
       !CT_BAPIRET2 type BAPIRET2_T .
   class-methods ADD_BAPIRET2_FROM_CX_ROOT
@@ -294,11 +339,15 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
 
   METHOD check_odp_logsys_exist.
 
-    CLEAR: et_return, ev_sy_subrc.
+    DATA: ls_context TYPE cl_rsds_access_odp=>ts_odp_context.
+
+    CLEAR: et_return, ev_sy_subrc, ev_context.
     CALL FUNCTION 'RSDS_ODP_SYSTEM_PROP'
       EXPORTING
         i_logsys    = iv_logsys
         i_no_dialog = abap_true
+      IMPORTING
+        es_context  = ls_context
       EXCEPTIONS
         OTHERS      = 1.
     IF sy-subrc <> 0.
@@ -308,6 +357,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
           ct_bapiret2 = et_return ).
     ELSE.
       ev_exist    = abap_true.
+      ev_context = ls_context-context.
     ENDIF.
 
   ENDMETHOD.
@@ -430,6 +480,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
     es_tlogo-objnm = iv_adsonm.
     es_tlogo-tlogo = 'ADSO'.
 
+
   ENDMETHOD.
 
 
@@ -453,6 +504,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       lo_ds          TYPE REF TO cl_rsds_rsds,
       lo_access_meth TYPE REF TO cl_rsds_accessmethods,
       lx_err_msg     TYPE REF TO cx_rs_error_with_message,
+      lv_context     TYPE rodps_context,
       lx_root        TYPE REF TO cx_root.
 
     FIELD-SYMBOLS: <ls_msg> TYPE bal_s_msg.
@@ -466,6 +518,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
         iv_logsys   = iv_logsys
       IMPORTING
         ev_exist    = lv_logsys_exists
+        ev_context  = lv_context
         ev_sy_subrc = ev_sy_subrc
         et_return   = et_return ).
 
@@ -473,12 +526,23 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    lv_data_source = iv_cds_odp.
+    IF lv_context <> 'ABAP_CDS' AND
+       lv_context <> 'SAPI'.
+
+      ev_sy_subrc = sy-subrc.
+      MESSAGE s000(/goog/bqtr) WITH 'Only ODP ABAP-CDS' '& SAPI sources are supported' INTO DATA(lv_temp_message).
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+      RETURN.
+    ENDIF.
+
+    lv_data_source = iv_ds.
 
     DATA: lv_search_pattern TYPE rodps_odpname.
     DATA: lt_nodes TYPE rodps_repl_t_node.
 
-    lv_search_pattern = iv_cds_odp && '*'.
+    lv_search_pattern = iv_ds && '*'.
     CALL METHOD cl_rsds_access_odp=>rodps_repl_odp_get_list
       EXPORTING
         i_logsys             = iv_logsys
@@ -500,7 +564,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
 
     DATA: ls_node TYPE REF TO rodps_repl_s_node.
     READ TABLE lt_nodes REFERENCE INTO ls_node
-    WITH KEY display_name = iv_cds_odp.
+    WITH KEY display_name = iv_ds.
     IF sy-subrc IS NOT INITIAL.
       ev_sy_subrc = 4.
       APPEND VALUE #( id         = '/GOOG/BQTR'
@@ -664,11 +728,53 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
+
 *   Return what was generated
     es_tlogo-objnm(30)    = lv_data_source.
     es_tlogo-objnm+30(10) = iv_logsys.
     es_tlogo-tlogo = 'RSDS'.
     es_tlogo-odpname = lv_odpname.
+
+
+    " Some additional details for SAPI / Legacy systems
+    IF lv_context = 'SAPI'.
+      DATA: ls_oltpsource TYPE  rsaot_s_osource.
+
+      DATA: lv_oltpsource TYPE   rsaot_oltpsource.
+
+      lv_oltpsource = iv_ds.
+
+      CALL FUNCTION 'RSA1_SINGLE_OLTPSOURCE_GET'
+        EXPORTING
+          i_oltpsource   = lv_oltpsource
+        IMPORTING
+          e_s_oltpsource = ls_oltpsource
+        EXCEPTIONS
+          no_authority   = 1
+          not_exist      = 2
+          inconsistent   = 3
+          OTHERS         = 4.
+      IF sy-subrc <> 0.
+        ev_sy_subrc = sy-subrc.
+        /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+      ENDIF.
+    ENDIF.
+
+    es_tlogo-object =
+      COND #( WHEN lv_context = 'ABAP_CDS'
+               THEN iv_ds
+              WHEN lv_context = 'SAPI'
+               THEN COND #( WHEN ls_oltpsource-exmethod = 'V'
+                             THEN ls_oltpsource-extractor
+                            ELSE ls_oltpsource-exstruct ) ).
+
+    es_tlogo-updmode =
+       COND #( WHEN lo_ds->realtime_supported( ) = 'X'
+                 THEN 'D'
+               ELSE 'F' ).
 
   ENDMETHOD.
 
@@ -708,7 +814,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
           i_t_tlogo = lt_tlogo
         ).
 
-        lo_dtp->if_rsbk_dtp_maintain~set_updmode( lc_delta_load ).
+        lo_dtp->if_rsbk_dtp_maintain~set_updmode( iv_tlogo_ds-updmode ).
 
 
         ls_dtp = lo_dtp->if_rsbk_dtp_display~get_dtp( ).
@@ -1313,6 +1419,391 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
           ct_bapiret2 = et_return ).
       RETURN.
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD add_trnf_map_odso.
+
+    CONSTANTS:
+      co_input  TYPE rstran_paramtype VALUE '0',
+      co_output TYPE rstran_paramtype VALUE '1'.
+
+    DATA:
+      lt_posit TYPE rstran_t_posit_mapping,
+      ls_posit TYPE rstran_s_posit_mapping.
+
+    TRY.
+        "First field of input
+        ls_posit-posit        = 0001.
+        ls_posit-segid        = '0001'.
+        ls_posit-paramtype    = co_input.
+        APPEND ls_posit TO lt_posit.
+
+        io_trfn->get_target(
+          IMPORTING
+            e_r_target  = DATA(lo_target) ).
+
+        lo_target->get_header(
+         IMPORTING
+            e_s_head = DATA(ls_header) ).
+
+        lo_target->get_list(
+          IMPORTING
+            e_t_field   = DATA(lt_target_field) ).
+
+        READ TABLE lt_target_field TRANSPORTING NO FIELDS
+           WITH KEY iobjnm = iv_iobj.
+        IF sy-subrc IS INITIAL.
+          ls_posit-posit        = sy-tabix.
+          ls_posit-segid        = '0001'.
+          ls_posit-paramtype    = co_output.
+          APPEND ls_posit TO lt_posit.
+        ELSE.
+          RETURN.
+        ENDIF.
+
+        io_trfn->add_rule(
+          EXPORTING
+            i_ruletype  = 'DIRECT'
+            i_t_posit   = lt_posit
+            i_groupid   = '02' ).
+
+        CLEAR lt_posit.
+
+        ls_posit-posit        = lines( lt_target_field ).
+        ls_posit-segid        = '0001'.
+        ls_posit-paramtype    = co_output.
+        APPEND ls_posit TO lt_posit.
+
+        io_trfn->add_rule(
+          EXPORTING
+            i_t_posit   = lt_posit
+            i_groupid   = '02' ).
+
+      CATCH cx_root.
+
+    ENDTRY.
+
+  ENDMETHOD.
+
+
+  METHOD create_dtp_legacy.
+
+    DATA: ls_src TYPE RSTRAN_S_TLOGO.
+    DATA: ls_trg TYPE RSTRAN_S_TLOGO.
+
+    ls_src = CORRESPONDING #( IV_TLOGO_DS ).
+    ls_trg = CORRESPONDING #( IV_TLOGO_ADSO ).
+
+    CALL FUNCTION 'RSDF_GENERATE_DTPA'
+      EXPORTING
+        i_s_src = ls_src
+        i_s_tgt = ls_trg
+      IMPORTING
+        e_dtp   = ev_dtpnm
+      EXCEPTIONS
+        failed  = 1
+        OTHERS  = 2.
+    IF sy-subrc <> 0.
+      ev_sy_subrc = sy-subrc.
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD create_odso.
+
+    DATA: lt_field         TYPE cl_rsds_access_odp=>tt_repl_field.
+
+    CLEAR: et_return, ev_sy_subrc.
+    CALL METHOD cl_rsds_access_odp=>rodps_repl_odp_get_detail
+      EXPORTING
+        i_logsys  = iv_logsys
+        i_odpname = iv_odpname
+      IMPORTING
+        et_fields = lt_field
+        et_return = et_return.
+
+    LOOP AT et_return TRANSPORTING NO FIELDS
+      WHERE type CA 'AEX'.
+      EXIT.
+    ENDLOOP.
+    IF sy-subrc IS INITIAL.
+      ev_sy_subrc = 4.
+      RETURN.
+    ENDIF.
+
+    DATA: ls_key_field TYPE REF TO cl_rsds_access_odp=>ts_repl_field.
+
+    READ TABLE lt_field REFERENCE INTO ls_key_field
+         INDEX 1.
+    IF sy-subrc IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+
+    CALL FUNCTION 'RSDF_GENERATE_IOBJ_SIMPLE'
+      EXPORTING
+        i_iobjnm      = iv_iobj
+        i_type        = 'CHA'
+        i_description = ls_key_field->description
+        i_datatype    = ls_key_field->type
+        i_leng        = ls_key_field->length
+      EXCEPTIONS
+        failed        = 1
+        OTHERS        = 2.
+    IF sy-subrc <> 0.
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+      ev_sy_subrc = 4.
+      RETURN.
+    ENDIF.
+
+    DATA: lt_info_obj TYPE STANDARD TABLE OF bapi6108io.
+
+    lt_info_obj = VALUE #( ( infoobject = iv_iobj ) ).
+
+    CALL FUNCTION 'BAPI_IOBJ_ACTIVATE_MULTIPLE'
+      TABLES
+        infoobjects = lt_info_obj
+        return      = et_return.
+    LOOP AT et_return TRANSPORTING NO FIELDS
+      WHERE type CA 'AEX'.
+      EXIT.
+    ENDLOOP.
+    IF sy-subrc IS INITIAL.
+      ev_sy_subrc = 4.
+      RETURN.
+    ENDIF.
+
+    DATA: ls_odso_details TYPE bapi6116.
+    DATA: lt_info_obj_odso TYPE STANDARD TABLE OF bapi6116io.
+
+    ls_odso_details-odsobject = iv_adsonm.
+    ls_odso_details-objvers = 'N'.
+
+    APPEND VALUE #( odsobject = iv_adsonm
+                    posit = 0001
+                    keyflag = 'X'
+                    infoobject = iv_iobj
+                    iobjtp = 'CHA' )
+            TO lt_info_obj_odso.
+
+    CALL FUNCTION 'RSDF_GENERATE_ODSO'
+      EXPORTING
+        i_details       = ls_odso_details
+      TABLES
+        i_t_infoobjects = lt_info_obj_odso
+      EXCEPTIONS
+        failed          = 1
+        OTHERS          = 2.
+    IF sy-subrc <> 0.
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+      ev_sy_subrc = 4.
+      RETURN.
+    ENDIF.
+
+    es_tlogo-objnm = iv_adsonm.
+    es_tlogo-tlogo = 'ODSO'.
+
+
+  ENDMETHOD.
+
+
+  METHOD create_trnf_odso.
+
+    DATA:
+      ls_source TYPE rstran_s_tlogo,
+      ls_target TYPE rstran_s_tlogo,
+      lv_subrc  TYPE sysubrc,
+      lo_trfn   TYPE REF TO cl_rstran_trfn,
+      lx_ex     TYPE REF TO cx_root.
+
+    CLEAR: et_return, ev_sy_subrc.
+    "TODO - Check existance
+
+    MOVE-CORRESPONDING iv_tlogo_ds TO ls_source.
+    MOVE-CORRESPONDING iv_tlogo_adso TO ls_target.
+
+    TRY.
+        lo_trfn = cl_rstran_trfn=>factory(
+          EXPORTING
+            i_s_source = ls_source
+            i_s_target = ls_target
+        ).
+      CATCH cx_root INTO lx_ex.
+        ev_sy_subrc = 4.
+        add_bapiret2_from_cx_root(
+          EXPORTING
+            io_error    = lx_ex
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+    DATA: lv_tranid TYPE rstranid.
+
+    lo_trfn->get_tranid(
+      IMPORTING
+        e_tranid = lv_tranid ).
+
+    add_trnf_map_odso(
+     iv_iobj = iv_iobj
+     io_trfn = lo_trfn ).
+
+    apply_routine(
+      iv_mass_tr_key = iv_mass_tr_key
+      iv_data_source = conv #( iv_tlogo_ds-object )
+      io_trfn        = lo_trfn
+      iv_mandt_fval  = iv_mandt_fval ).
+
+*  Try to save object
+    TRY.
+        lo_trfn->if_rso_tlogo_maintain~save(
+          EXPORTING
+            i_with_cto = abap_false
+          IMPORTING
+            e_subrc    = lv_subrc ).
+        IF lv_subrc <> 0.
+          ev_sy_subrc = lv_subrc.
+          /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+            CHANGING
+              ct_bapiret2 = et_return ).
+          RETURN.
+        ENDIF.
+      CATCH cx_root INTO lx_ex.
+        ev_sy_subrc = 4.
+        add_bapiret2_from_cx_root(
+          EXPORTING
+            io_error    = lx_ex
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+*  Try to activate object
+    lo_trfn->if_rso_tlogo_maintain~activate(
+      EXPORTING
+        i_force_activation = abap_true
+        i_with_cto         = abap_false
+      IMPORTING
+        e_subrc            = lv_subrc ).
+
+    IF lv_subrc <> 0.
+      ev_sy_subrc = lv_subrc.
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+      RETURN.
+    ENDIF.
+
+    es_tlogo-objnm = lv_tranid.
+    es_tlogo-tlogo    = 'TRFN'.
+
+  ENDMETHOD.
+
+
+  METHOD delete_odso.
+
+    DATA: l_t_ods    TYPE TABLE OF rso_s_tlogo,
+          l_s_ods    TYPE rso_s_tlogo,
+          l_th_ods   TYPE rso_th_tlogo,
+          l_s_odstab TYPE rstran_ut_ods_delete,
+          g_r_odso   TYPE REF TO cl_rsd_odso,
+          l_ods      TYPE rsdodsobject.
+
+    l_s_ods-tlogo   = 'ODSO'.
+    l_s_ods-objnm   = iv_adsonm.
+    l_ods           = iv_adsonm.
+
+    CALL METHOD cl_rsd_odso=>factory
+      EXPORTING
+        i_odsobject   = l_ods
+      RECEIVING
+        r_r_odso      = g_r_odso
+      EXCEPTIONS
+        input_invalid = 1
+        cancelled     = 2
+        OTHERS        = 3.
+    IF sy-subrc <> 0.
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+      ev_sy_subrc = 4.
+      RETURN.
+    ENDIF.
+
+    APPEND l_s_ods TO l_t_ods.
+    l_th_ods = l_t_ods.
+
+    TRY.
+        CALL METHOD g_r_odso->prepare
+          EXPORTING
+            i_with_enqueue   = rs_c_true
+            i_with_authority = rs_c_true.
+      CATCH cx_rs_error INTO DATA(lx_err_msg).
+        ev_sy_subrc = sy-subrc.
+        add_bapiret2_from_rs_error(
+          EXPORTING
+            io_rs_error = lx_err_msg
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+    TRY.
+        CALL METHOD g_r_odso->delete
+          EXPORTING
+            i_th_tlogo      = l_th_ods
+            i_external      = rs_c_false
+            i_show_protocol = rs_c_false
+            i_with_cto      = rs_c_true.
+      CATCH cx_rs_cancelled INTO DATA(lr_rs_cancelled).
+        ev_sy_subrc = 4.
+        add_bapiret2_from_rs_error(
+          EXPORTING
+            io_rs_error = lr_rs_cancelled
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+    COMMIT WORK.
+
+    DATA: lt_iobj_del TYPE rsd_t_c30.
+    DATA: lt_msg TYPE rs_t_msg.
+    DATA: lv_subrc TYPE sysubrc.
+
+    lt_iobj_del = VALUE #( ( objnm  = iv_iobj ) ).
+
+    CALL FUNCTION 'RSDG_IOBJ_MULTI_DELETE'
+      EXPORTING
+        i_t_iobjnm = lt_iobj_del
+      IMPORTING
+        e_t_msg    = lt_msg
+        e_subrc    = lv_subrc.
+
+    LOOP AT lt_msg ASSIGNING FIELD-SYMBOL(<ls_msg>)
+      WHERE msgty = 'E'.
+      DATA(ls_bapiret2) = VALUE bapiret2( ).
+      ls_bapiret2-id = <ls_msg>-msgid.
+      ls_bapiret2-number = <ls_msg>-msgno.
+      ls_bapiret2-message_v1 = <ls_msg>-msgv1.
+      ls_bapiret2-message_v2 = <ls_msg>-msgv2.
+      ls_bapiret2-message_v3 = <ls_msg>-msgv3.
+      ls_bapiret2-message_v4 = <ls_msg>-msgv4.
+
+      APPEND ls_bapiret2 TO et_return.
+
+    ENDLOOP.
+
+    COMMIT WORK.
 
   ENDMETHOD.
 ENDCLASS.

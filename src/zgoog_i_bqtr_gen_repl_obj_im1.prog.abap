@@ -21,7 +21,7 @@ CLASS lcl_tool IMPLEMENTATION.
     IF p_psel = abap_true.
       ls_data-trkey = p_trkey.
       ls_data-dsname = p_dsnam.
-      ls_data-cds   = p_cds.
+      ls_data-ds   = p_cds.
       ls_data-logsy = p_logsy.
       ls_data-appl  = p_appl.
       ls_data-adso  = p_adso.
@@ -55,10 +55,10 @@ CLASS lcl_tool IMPLEMENTATION.
 
     DATA: lv_dtp TYPE rsbkdtpnm.
 
-    lv_ds_name = iv_cds.
+    lv_ds_name = iv_ds.
     zgoog_cl_bqtr_gen_bw_object=>create_bw_ds(
       EXPORTING
-        iv_cds_odp  = lv_ds_name
+        iv_ds       = lv_ds_name
         iv_dsnam    = iv_dsname
         iv_logsys   = iv_logsy
         iv_applnm   = iv_appl
@@ -69,7 +69,7 @@ CLASS lcl_tool IMPLEMENTATION.
 
     lv_adso_name = iv_adso.
 
-    add_status( iv_cds         = iv_cds
+    add_status( iv_ds         = iv_ds
                 iv_description = 'BW Data Source'
                 iv_value       = |{ iv_dsname } with ODP Provider { lv_ds_name } |
                 it_return      = lt_return ).
@@ -86,7 +86,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_cds         = iv_cds
+      add_status( iv_ds         = iv_ds
                   iv_description = 'Advanced Data Store Object (ADSO)'
                   iv_value       = CONV #( lv_adso_name )
                   it_return      = lt_return ).
@@ -105,7 +105,7 @@ CLASS lcl_tool IMPLEMENTATION.
             ev_sy_subrc    = lv_sy_subrc
             et_return      = lt_return ).
 
-        add_status( iv_cds         = iv_cds
+        add_status( iv_ds         = iv_ds
                     iv_description = 'Data Transformation (RSDS)'
                     iv_value       = |RSDS { lv_ds_name }/{ iv_logsy } -> ADSO { lv_adso_name }|
                     it_return      = lt_return ).
@@ -123,7 +123,7 @@ CLASS lcl_tool IMPLEMENTATION.
               ev_sy_subrc   = lv_sy_subrc
               et_return     = lt_return ).
 
-          add_status( iv_cds         = iv_cds
+          add_status( iv_ds         = iv_ds
                       iv_description = 'Data Transfer Process'
                       iv_value       = |{ lv_ds_name }/{ iv_logsy } -> { lv_dtp }|
                       it_return      = lt_return ).
@@ -137,7 +137,7 @@ CLASS lcl_tool IMPLEMENTATION.
                 ev_sy_subrc = lv_sy_subrc
                 et_return   = lt_return
             ).
-            add_status( iv_cds         = iv_cds
+            add_status( iv_ds         = iv_ds
                         iv_description = 'Process Chain Trigger'
                         iv_value       = |{ iv_trig }|
                         it_return      = lt_return ).
@@ -156,7 +156,7 @@ CLASS lcl_tool IMPLEMENTATION.
                   ev_sy_subrc = lv_sy_subrc
                   et_return   = lt_return
               ).
-              add_status( iv_cds         = iv_cds
+              add_status( iv_ds         = iv_ds
                           iv_description = 'Process Chain'
                           iv_value       = |{ iv_chain }|
                           it_return      = lt_return ).
@@ -184,7 +184,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_cds         = iv_cds
+      add_status( iv_ds         = iv_ds
                   iv_description = 'Process Chain'
                   iv_value       = |{ iv_chain }|
                   iv_category    = lc_delete
@@ -198,7 +198,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_cds         = iv_cds
+      add_status( iv_ds         = iv_ds
                   iv_description = 'Process Chain Trigger'
                   iv_value       = |{ iv_trig }|
                   iv_category    = lc_delete
@@ -216,9 +216,9 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_cds         = iv_cds
+      add_status( iv_ds         = iv_ds
                   iv_description = 'BW Data Source (including Dependencies)'
-                  iv_value       = CONV #( iv_cds )
+                  iv_value       = CONV #( iv_ds )
                   iv_category    = lc_delete
                   it_return      = lt_return ).
 
@@ -232,7 +232,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_cds         = iv_cds
+      add_status( iv_ds         = iv_ds
                   iv_description = 'Advanced Data Store Object (ADSO)'
                   iv_value       = CONV #( iv_adso )
                   iv_category    = lc_delete
@@ -247,7 +247,7 @@ CLASS lcl_tool IMPLEMENTATION.
 
     ls_output-description = iv_description.
     ls_output-value       = iv_value.
-    ls_output-cds         = iv_cds.
+    ls_output-cds         = iv_ds.
 
     LOOP AT it_return ASSIGNING FIELD-SYMBOL(<ls_return>) WHERE type IS NOT INITIAL.
       IF     <ls_return>-type = 'E'.
@@ -351,7 +351,7 @@ CLASS lcl_tool IMPLEMENTATION.
       IF p_clean = abap_true.
         cleanup( iv_trkey  = <ls_data>-trkey
                  iv_dsname = <ls_data>-dsname
-                 iv_cds    = <ls_data>-cds
+                 iv_ds    = <ls_data>-ds
                  iv_logsy  = <ls_data>-logsy
                  iv_appl   = <ls_data>-appl
                  iv_adso   = <ls_data>-adso
@@ -362,7 +362,7 @@ CLASS lcl_tool IMPLEMENTATION.
       ELSE.
         create( iv_trkey  = <ls_data>-trkey
                 iv_dsname = <ls_data>-dsname
-                iv_cds    = <ls_data>-cds
+                iv_ds    = <ls_data>-ds
                 iv_logsy  = <ls_data>-logsy
                 iv_appl   = <ls_data>-appl
                 iv_adso   = <ls_data>-adso
