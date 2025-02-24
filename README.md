@@ -1,6 +1,6 @@
 # ![Google Cloud](https://avatars.githubusercontent.com/u/2810941?s=60&v=4) BigQuery Toolkit for SAP - Replication Objects Generator
 
-> 📢 🚀[Annoucing Archive to BigQuery feature, powered by BigQuery Toolkit for SAP](#archive-to-bigquery) 
+> 📢 🚀[Annoucing Generators for SAPI and CDS Extractors in legacy SAP systems](#23---legacy-replication-objects-generator) 
 
 ## Introduction
 The tools in this repo allow you generate required objects and boilerplate code for establishing a data replication pipeline from SAP into BigQuery by utilizing [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-overview)  
