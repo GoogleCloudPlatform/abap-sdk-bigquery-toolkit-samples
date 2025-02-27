@@ -56,6 +56,8 @@ CLASS lcl_file_handler IMPLEMENTATION.
         WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
     ENDIF.
 
+    DELETE lt_tab INDEX 1.
+
     LOOP AT lt_tab ASSIGNING <ls_tab>.
 
       CLEAR ls_data.

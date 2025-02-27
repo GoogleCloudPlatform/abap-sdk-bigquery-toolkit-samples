@@ -1550,7 +1550,7 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
         i_iobjnm      = iv_iobj
         i_type        = 'CHA'
         i_description = ls_key_field->description
-        i_datatype    = ls_key_field->type
+        i_datatype    = 'CHAR' "Anything can go into CHAR
         i_leng        = ls_key_field->length
       EXCEPTIONS
         failed        = 1
