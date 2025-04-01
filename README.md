@@ -62,7 +62,7 @@ CDS View Generator program ZGOOG_R_BQTR_GEN_MASS_CDS_VIEW can be used to create 
 ![alt_text](images/CDS_Gen.png "CDS Generator Screen")
 
 Input Parameters:
- ​​- Select .csv file - Enter a file that is stored in your computer. The file should contain a tab separated list with 2 columns:
+ ​​- Select .csv file - Enter a file that is stored in your computer. The file should have 2 columns with values separated by commas
    - SAP Tablename
    - CDS Entity / View Name
    - SQL View Name (Optional, only required if you want to generate CDS Views, which are obsolete)
