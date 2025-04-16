@@ -43,7 +43,8 @@ You can import objects of this repo into your system by using abapGit. Alternati
 
 
 ### [1.1 - Compatibility](#table-of-contents)
-Tools are compatible with S/4HANA 1909 and higher.
+ - CDS Replication Object Generator is compatible with S/4HANA 1909 and higher.
+ - Legacy (SAPI) Replication Objects Generator  is compatible with all ERP systems
 
 
 ### [1.2 - Pre-requisites](#table-of-contents)
