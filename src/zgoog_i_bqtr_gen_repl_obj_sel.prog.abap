@@ -43,11 +43,17 @@ SELECTION-SCREEN END OF BLOCK b2.
 
 SELECTION-SCREEN BEGIN OF BLOCK b6 WITH FRAME TITLE TEXT-t06.
   PARAMETERS: p_mandt AS CHECKBOX MODIF ID m02 USER-COMMAND uc2 DEFAULT 'X',
-              p_mfnam TYPE name_feld MODIF ID m01 DEFAULT 'MANDT',
-              p_activ AS CHECKBOX MODIF ID m02 USER-COMMAND uc2 DEFAULT 'X'.
-  SELECTION-SCREEN COMMENT /01(79) TEXT-001  MODIF ID m02.
-
+              p_mfnam TYPE name_feld MODIF ID m01 DEFAULT 'MANDT'.
 SELECTION-SCREEN END OF BLOCK b6.
+
+
+SELECTION-SCREEN BEGIN OF BLOCK b7 WITH FRAME TITLE TEXT-t07.
+  PARAMETERS: p_activ AS CHECKBOX MODIF ID m07 USER-COMMAND uc2 DEFAULT 'X'.
+  SELECTION-SCREEN COMMENT /01(79) TEXT-001  MODIF ID m07.
+  PARAMETERS: p_durmi TYPE btcpmin DEFAULT '01' MODIF ID m07,
+              p_min   RADIOBUTTON GROUP rb7 USER-COMMAND uc7 DEFAULT 'X' MODIF ID m07,
+              p_hour  RADIOBUTTON GROUP rb7 MODIF ID m07.
+SELECTION-SCREEN END OF BLOCK b7.
 
 SELECTION-SCREEN BEGIN OF BLOCK b3 WITH FRAME TITLE TEXT-t03.
   PARAMETERS: p_trkey TYPE /goog/trkey MODIF ID lc1 MATCHCODE OBJECT /goog/sh_bqtr_transf_key,
@@ -131,7 +137,7 @@ AT SELECTION-SCREEN OUTPUT.
           screen-input = 0.
           screen-invisible = 1.
         ENDIF.
-      ELSEIF screen-group1 = 'M01' OR screen-group1 = 'M02'.
+      ELSEIF screen-group1 = 'M01' OR screen-group1 = 'M02' OR screen-group1 = 'M07'.
         screen-input     = 0.
         screen-invisible = 1.
       ENDIF.

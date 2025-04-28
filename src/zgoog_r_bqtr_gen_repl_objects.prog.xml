@@ -13,7 +13,7 @@
     <item>
      <ID>I</ID>
      <KEY>001</KEY>
-     <ENTRY>This will immediately start the replication job scheduled to run every minute.</ENTRY>
+     <ENTRY>This will immediately start the replication job scheduled to run periodically.</ENTRY>
      <LENGTH>132</LENGTH>
     </item>
     <item>
@@ -51,6 +51,12 @@
      <KEY>T06</KEY>
      <ENTRY>Additional Options</ENTRY>
      <LENGTH>60</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>T07</KEY>
+     <ENTRY>Trigger Details</ENTRY>
+     <LENGTH>42</LENGTH>
     </item>
     <item>
      <ID>R</ID>
@@ -116,6 +122,18 @@
     </item>
     <item>
      <ID>S</ID>
+     <KEY>P_DURMI</KEY>
+     <ENTRY>Replication Frequency</ENTRY>
+     <LENGTH>38</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_HOUR</KEY>
+     <ENTRY>Hours</ENTRY>
+     <LENGTH>13</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
      <KEY>P_INFO</KEY>
      <ENTRY>.</ENTRY>
      <LENGTH>9</LENGTH>
@@ -139,6 +157,12 @@
      <KEY>P_MFNAM</KEY>
      <ENTRY>Field Name for Mandt</ENTRY>
      <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_MIN</KEY>
+     <ENTRY>Minutes</ENTRY>
+     <LENGTH>15</LENGTH>
     </item>
     <item>
      <ID>S</ID>

@@ -30,6 +30,7 @@ CLASS lcl_tool DEFINITION.
              adso   TYPE char9,
              chain  TYPE rspc_chain,
              trig   TYPE rspc_variant,
+             durmi  TYPE btcpmin,
              info   TYPE rsinfoarea,
              mfnam  TYPE name_feld,
              active TYPE boolean,
@@ -51,7 +52,7 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS cleanup IMPORTING iv_trkey  TYPE /goog/trkey
                                     iv_dsname TYPE rsoltpsourcer
-                                    iv_ds    TYPE ddlname OPTIONAL
+                                    iv_ds     TYPE ddlname OPTIONAL
                                     iv_logsy  TYPE rsslogsys
                                     iv_appl   TYPE rsapplnm
                                     iv_adso   TYPE char9
@@ -67,6 +68,7 @@ CLASS lcl_tool DEFINITION.
                                    iv_adso   TYPE char9
                                    iv_chain  TYPE rspc_chain
                                    iv_trig   TYPE rspc_variant
+                                   iv_durmi  TYPE btcpmin
                                    iv_info   TYPE rsinfoarea
                                    iv_active TYPE boolean
                                    iv_mfnam  TYPE name_feld.
@@ -75,7 +77,7 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS get_data.
 
-    CLASS-METHODS add_status IMPORTING iv_ds         TYPE ddlname
+    CLASS-METHODS add_status IMPORTING iv_ds          TYPE ddlname
                                        iv_description TYPE string
                                        iv_value       TYPE string
                                        iv_category    TYPE c DEFAULT 'C'

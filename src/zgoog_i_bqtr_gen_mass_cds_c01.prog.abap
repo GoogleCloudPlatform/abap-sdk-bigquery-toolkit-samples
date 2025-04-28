@@ -121,11 +121,15 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
     IF gt_excel_data[] IS NOT INITIAL.
       LOOP AT gt_excel_data INTO gs_excel_data.
         "fetch the table metadata
-        CALL FUNCTION 'IUUC_DD03L_EXTRACT'
-          EXPORTING
-            iv_tabname   = gs_excel_data-tablename
-          TABLES
-            it_fieldlist = gt_dd03l_extract[].
+*        CALL FUNCTION 'IUUC_DD03L_EXTRACT'
+*          EXPORTING
+*            iv_tabname   = gs_excel_data-tablename
+*          TABLES
+*            it_fieldlist = gt_dd03l_extract[].
+        SELECT *
+          FROM dd03l
+          INTO TABLE gt_dd03l_extract.
+
         IF sy-subrc = 0 AND gt_dd03l_extract IS NOT INITIAL.
           IF lo_mass_cds IS BOUND.
             CLEAR: gv_keyfieldlist, gv_nonkeyfieldlist.

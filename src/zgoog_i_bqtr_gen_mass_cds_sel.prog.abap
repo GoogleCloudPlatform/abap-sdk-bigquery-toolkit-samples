@@ -32,20 +32,6 @@ SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.
               p_mandt AS CHECKBOX.
 SELECTION-SCREEN END OF BLOCK b2.
 
-*AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.
-*  CALL FUNCTION 'KD_GET_FILENAME_ON_F4'
-*    EXPORTING
-*      static    = 'X'
-*    CHANGING
-*      file_name = p_file.
-
-
-
-
-
-
-
-
 INITIALIZATION.
   btn_down = 'Download Template'.
 
@@ -56,7 +42,7 @@ AT SELECTION-SCREEN.
   ENDCASE.
 
   "validate package
-  SELECT SINGLE object FROM tadir INTO @DATA(lv_tadir) WHERE obj_name = @p_pkg AND object = 'DEVC'.
+  SELECT SINGLE devclass FROM tdevc INTO @DATA(lv_devc) WHERE devclass = @p_pkg.
   IF sy-subrc <> 0.
     MESSAGE 'Invalid Package' TYPE 'E'.
   ENDIF.
@@ -67,7 +53,7 @@ AT SELECTION-SCREEN.
     MESSAGE 'Invalid TR' TYPE 'E'.
   ENDIF.
 
-  CLEAR: lv_tadir, lv_tr.
+  CLEAR: lv_devc, lv_tr.
 
 
 AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_dpath.

@@ -193,6 +193,36 @@
      <DESCRIPT>Boolean Variable (X = True, - = False, Space = Unknown)</DESCRIPT>
     </SEOSUBCOTX>
     <SEOSUBCOTX>
+     <CMPNAME>CREATE_TRIGGER</CMPNAME>
+     <SCONAME>ET_RETURN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Return table</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_TRIGGER</CMPNAME>
+     <SCONAME>EV_SY_SUBRC</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP System Field: Return Code of ABAP Statements</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_TRIGGER</CMPNAME>
+     <SCONAME>IV_PRDHOURS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Duration period (in hours) for a batch job</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_TRIGGER</CMPNAME>
+     <SCONAME>IV_PRDMIN</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Duration period (in minutes) for a batch job</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CREATE_TRIGGER</CMPNAME>
+     <SCONAME>IV_TRIGGER</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Name of the trigger</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
      <CMPNAME>CREATE_TRNF</CMPNAME>
      <SCONAME>ET_RETURN</SCONAME>
      <LANGU>E</LANGU>

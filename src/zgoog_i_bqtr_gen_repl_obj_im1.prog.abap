@@ -19,16 +19,17 @@ CLASS lcl_tool IMPLEMENTATION.
     DATA: ls_data TYPE mty_data.
 
     IF p_psel = abap_true.
-      ls_data-trkey = p_trkey.
-      ls_data-dsname = p_dsnam.
-      ls_data-ds   = p_cds.
-      ls_data-logsy = p_logsy.
-      ls_data-appl  = p_appl.
-      ls_data-adso  = p_adso.
-      ls_data-chain = p_chain.
-      ls_data-trig  = p_trig.
-      ls_data-info  = p_info.
-      ls_data-active = p_activ.
+      ls_data-trkey   = p_trkey.
+      ls_data-dsname  = p_dsnam.
+      ls_data-ds      = p_cds.
+      ls_data-logsy   = p_logsy.
+      ls_data-appl    = p_appl.
+      ls_data-adso    = p_adso.
+      ls_data-chain   = p_chain.
+      ls_data-trig    = p_trig.
+      ls_data-durmi   = p_durmi.
+      ls_data-info    = p_info.
+      ls_data-active  = p_activ.
       IF p_mandt = abap_true.
         ls_data-mfnam = p_mfnam.
       ENDIF.
@@ -50,7 +51,9 @@ CLASS lcl_tool IMPLEMENTATION.
     DATA: ls_tlogo_adso TYPE zgoog_cl_bqtr_gen_bw_object=>t_tlogo.
     DATA: lv_adso_name TYPE rsoadsonm.
     DATA: ls_tlogo_ds TYPE zgoog_cl_bqtr_gen_bw_object=>t_tlogo.
-    DATA: lv_ds_name TYPE string.
+    DATA: lv_ds_name TYPE string,
+          lv_durmi   TYPE btcpmin,
+          lv_durho   TYPE btcphour.
     DATA: ls_tlogo_trnf TYPE zgoog_cl_bqtr_gen_bw_object=>t_tlogo.
 
     DATA: lv_dtp TYPE rsbkdtpnm.
@@ -69,7 +72,7 @@ CLASS lcl_tool IMPLEMENTATION.
 
     lv_adso_name = iv_adso.
 
-    add_status( iv_ds         = iv_ds
+    add_status( iv_ds          = iv_ds
                 iv_description = 'BW Data Source'
                 iv_value       = |{ iv_dsname } with ODP Provider { lv_ds_name } |
                 it_return      = lt_return ).
@@ -86,7 +89,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_ds         = iv_ds
+      add_status( iv_ds          = iv_ds
                   iv_description = 'Advanced Data Store Object (ADSO)'
                   iv_value       = CONV #( lv_adso_name )
                   it_return      = lt_return ).
@@ -105,7 +108,7 @@ CLASS lcl_tool IMPLEMENTATION.
             ev_sy_subrc    = lv_sy_subrc
             et_return      = lt_return ).
 
-        add_status( iv_ds         = iv_ds
+        add_status( iv_ds          = iv_ds
                     iv_description = 'Data Transformation (RSDS)'
                     iv_value       = |RSDS { lv_ds_name }/{ iv_logsy } -> ADSO { lv_adso_name }|
                     it_return      = lt_return ).
@@ -123,21 +126,29 @@ CLASS lcl_tool IMPLEMENTATION.
               ev_sy_subrc   = lv_sy_subrc
               et_return     = lt_return ).
 
-          add_status( iv_ds         = iv_ds
+          add_status( iv_ds          = iv_ds
                       iv_description = 'Data Transfer Process'
                       iv_value       = |{ lv_ds_name }/{ iv_logsy } -> { lv_dtp }|
                       it_return      = lt_return ).
 
           IF lv_dtp IS NOT INITIAL.
 
+            IF p_min = abap_true.
+              lv_durmi = iv_durmi.
+            ELSEIF p_hour = abap_true.
+              lv_durho = iv_durmi.
+            ENDIF.
+
             zgoog_cl_bqtr_gen_bw_object=>create_trigger(
               EXPORTING
                 iv_trigger  = CONV #( iv_trig )
+                iv_prdmin   = lv_durmi
+                iv_prdhours = lv_durho
               IMPORTING
                 ev_sy_subrc = lv_sy_subrc
                 et_return   = lt_return
             ).
-            add_status( iv_ds         = iv_ds
+            add_status( iv_ds          = iv_ds
                         iv_description = 'Process Chain Trigger'
                         iv_value       = |{ iv_trig }|
                         it_return      = lt_return ).
@@ -156,7 +167,7 @@ CLASS lcl_tool IMPLEMENTATION.
                   ev_sy_subrc = lv_sy_subrc
                   et_return   = lt_return
               ).
-              add_status( iv_ds         = iv_ds
+              add_status( iv_ds          = iv_ds
                           iv_description = 'Process Chain'
                           iv_value       = |{ iv_chain }|
                           it_return      = lt_return ).
@@ -184,7 +195,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_ds         = iv_ds
+      add_status( iv_ds          = iv_ds
                   iv_description = 'Process Chain'
                   iv_value       = |{ iv_chain }|
                   iv_category    = lc_delete
@@ -198,7 +209,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_ds         = iv_ds
+      add_status( iv_ds          = iv_ds
                   iv_description = 'Process Chain Trigger'
                   iv_value       = |{ iv_trig }|
                   iv_category    = lc_delete
@@ -216,7 +227,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_ds         = iv_ds
+      add_status( iv_ds          = iv_ds
                   iv_description = 'BW Data Source (including Dependencies)'
                   iv_value       = CONV #( iv_ds )
                   iv_category    = lc_delete
@@ -232,7 +243,7 @@ CLASS lcl_tool IMPLEMENTATION.
           ev_sy_subrc = lv_sy_subrc
           et_return   = lt_return ).
 
-      add_status( iv_ds         = iv_ds
+      add_status( iv_ds          = iv_ds
                   iv_description = 'Advanced Data Store Object (ADSO)'
                   iv_value       = CONV #( iv_adso )
                   iv_category    = lc_delete
@@ -351,7 +362,7 @@ CLASS lcl_tool IMPLEMENTATION.
       IF p_clean = abap_true.
         cleanup( iv_trkey  = <ls_data>-trkey
                  iv_dsname = <ls_data>-dsname
-                 iv_ds    = <ls_data>-ds
+                 iv_ds     = <ls_data>-ds
                  iv_logsy  = <ls_data>-logsy
                  iv_appl   = <ls_data>-appl
                  iv_adso   = <ls_data>-adso
@@ -362,12 +373,13 @@ CLASS lcl_tool IMPLEMENTATION.
       ELSE.
         create( iv_trkey  = <ls_data>-trkey
                 iv_dsname = <ls_data>-dsname
-                iv_ds    = <ls_data>-ds
+                iv_ds     = <ls_data>-ds
                 iv_logsy  = <ls_data>-logsy
                 iv_appl   = <ls_data>-appl
                 iv_adso   = <ls_data>-adso
                 iv_chain  = <ls_data>-chain
                 iv_trig   = <ls_data>-trig
+                iv_durmi  = <ls_data>-durmi
                 iv_info   = <ls_data>-info
                 iv_mfnam  = <ls_data>-mfnam
                 iv_active = <ls_data>-active

@@ -70,6 +70,7 @@ CLASS lcl_file_handler IMPLEMENTATION.
                                       ls_data-adso
                                       ls_data-chain
                                       ls_data-trig
+                                      ls_data-durmi
                                       ls_data-info
                                       ls_data-mfnam
                                       ls_data-active.

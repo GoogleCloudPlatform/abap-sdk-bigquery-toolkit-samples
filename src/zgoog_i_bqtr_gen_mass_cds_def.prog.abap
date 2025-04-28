@@ -28,7 +28,7 @@ CLASS lcl_cdsview_mass_cr DEFINITION.
   PUBLIC SECTION.
     METHODS: process_file_details, display_op.
 
-    METHODS get_field_alias IMPORTING is_field        TYPE iuuc_s_fieldlist
+    METHODS get_field_alias IMPORTING is_field        TYPE dd03l
                             RETURNING VALUE(rv_alias) TYPE string.
 
     METHODS prepare_data EXPORTING ev_keyfieldlist    TYPE string

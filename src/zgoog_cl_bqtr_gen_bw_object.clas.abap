@@ -85,6 +85,8 @@ public section.
   class-methods CREATE_TRIGGER
     importing
       !IV_TRIGGER type STRING
+      !IV_PRDMIN type BTCPMIN optional
+      !IV_PRDHOURS type BTCPHOUR optional
     exporting
       !EV_SY_SUBRC type SYST_SUBRC
       !ET_RETURN type BAPIRET2_T .
@@ -1374,7 +1376,15 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
 
     ls_startspecs-startdttyp  = 'I'.
     ls_startspecs-periodic    = abap_true.
-    ls_startspecs-prdmins     = '01'.
+
+    IF iv_prdmin IS NOT INITIAL.
+      ls_startspecs-prdmins = iv_prdmin.
+    ELSEIF iv_prdhours IS NOT INITIAL.
+      ls_startspecs-prdhours = iv_prdhours.
+    ELSE.
+      "Default to 1 min.
+      ls_startspecs-prdmins     = '01'.
+    ENDIF.
 
     lv_trigger = iv_trigger.
 
