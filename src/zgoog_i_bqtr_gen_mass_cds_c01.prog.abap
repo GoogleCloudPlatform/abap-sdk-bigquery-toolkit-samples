@@ -128,7 +128,8 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
 *            it_fieldlist = gt_dd03l_extract[].
         SELECT *
           FROM dd03l
-          INTO TABLE gt_dd03l_extract.
+          INTO TABLE gt_dd03l_extract
+          WHERE tabname = gs_excel_data-tablename.
 
         IF sy-subrc = 0 AND gt_dd03l_extract IS NOT INITIAL.
           IF lo_mass_cds IS BOUND.
