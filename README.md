@@ -34,7 +34,7 @@ This repo includes tools designed to simplify and accelerate the process of extr
    - [2.1 - CDS View Generator](#21---cds-view-generator)
    - [2.2 - Replication Objects Generator](#22---replication-objects-generator)
    - [2.3 - Legacy Replication Objects Generator](#23---legacy-replication-objects-generator)
-   - [2.4 - Dynamic Load Program](#23---dynamic-load-program)
+   - [2.4 - Dynamic Load Program](#24---dynamic-load-program)
  - [3 - Operations Guide](#3---operations-guide)
 
 
