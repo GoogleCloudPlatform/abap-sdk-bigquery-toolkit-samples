@@ -39,7 +39,7 @@ This repo includes tools designed to simplify and accelerate the process of extr
 
 
 ## [1 - Installation](#table-of-contents)
-You can import objects of this repo into your system by using abapGit. Alternatively, you can import the Transport Request attached to the release into your system by using STMS.
+You can import objects of this repo into your system by using abapGit. Alternatively, you can import the Transport Request attached to the [release](https://github.com/GoogleCloudPlatform/abap-sdk-bigquery-toolkit-samples/releases) into your system by using STMS.
 
 
 ### [1.1 - Compatibility](#table-of-contents)
@@ -121,7 +121,7 @@ You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG to generate replication ob
 ![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
 
 ### [2.4 - Dynamic Load Program](#table-of-contents)
-The program ZGOOG_R_BQTR_DEMO_DYN_LOAD demonstrates how you can directly load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
+The program [ZGOOG_R_BQTR_DEMO_DYN_LOAD](/src/zgoog_r_bqtr_demo_dyn_load.prog.abap) demonstrates how you can directly load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
 
 ![alt_text](images/Dynamic_Load_Demo.png "Dynamic Load Demo Program Screen")
 
