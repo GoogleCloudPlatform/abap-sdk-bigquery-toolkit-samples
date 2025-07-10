@@ -159,8 +159,8 @@ If your change results in data loss (i.e removing an existing field or changing 
 
 
 ### Known Issues and Resolutions
-If the initial load fails with an error or if the extractor remains in status "Extraction Running", apply the note https://me.sap.com/notes/0003038236 in your SAP system
 
-
-If you want to run initialization without data transfer and only do delta transfer - follow the steps in this [community blog](https://community.sap.com/t5/technology-blogs-by-members/automate-dtp-with-init-without-data-transfer-processing-mode/ba-p/13268694)
+- If the initial load fails with an error or if the extractor remains in status "Extraction Running", apply the note https://me.sap.com/notes/0003038236 in your SAP system
+- If you delta extraction does not work or fails with an error, apply the note https://me.sap.com/notes/0003590715
+- If you want to run initialization without data transfer and only do delta transfer - follow the steps in this [community blog](https://community.sap.com/t5/technology-blogs-by-members/automate-dtp-with-init-without-data-transfer-processing-mode/ba-p/13268694)
 
