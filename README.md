@@ -89,6 +89,8 @@ The program ZGOOG_R_BQTR_GEN_REPL_OBJECTS will generate the following data repli
    - BW End Routine
  - Process Chain to auto-trigger DTP when there is a change in source data
 
+Note: Within this tool, you can choose to include the client field from your SAP system as the first column of the BigQuery table. To do this, simply select the "Transfer with MANDT field" checkbox. If your SAP table uses a different name for the client field (such as RCLNT for the ACDOCA table) instead of the standard MANDT, you must specify that name in the corresponding field on the screen. The generated code will then use the correct client field name for the data transfer.
+
 ![alt_text](images/Data_Transfer_Gen.png "Data Transfer Generator Screen")
 
 Within Start Routine, the generated code will call the BigQuery Toolkit Data Load Class /GOOG/CL_BQTR_DATA_LOAD to load the data into BigQuery.
