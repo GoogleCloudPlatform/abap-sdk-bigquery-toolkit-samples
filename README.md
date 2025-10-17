@@ -51,7 +51,7 @@ You can import objects of this repo into your system by using abapGit. Alternati
 The following steps should be completed before using B/W Generator
 - [ABAP SDK for Google Cloud On-prem or Any-cloud edition](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/install-config), V1.9 or higher is installed in your SAP system
 - [BQ Data Transfer Configuration](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-configuration) is completed by using Tcode /GOOG/BQTR_SETTINGS
-- The ERP system is set up as both BW Source System and ODP - ABAP CDS Views or ODP - SAP (Extractors) in Tcode RSA1. Both must be active
+- The ERP system is set up as BW Source System in Tcode RSA1 for various Data Sources.
 
 ## [2 - How to Guide](#table-of-contents)
 The typical user flow for utilizing the tools in this repository is as follows:
@@ -118,7 +118,7 @@ When you run the B/W Generator program, it will perform the corresponding action
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
 ### [2.3 - Legacy Replication Objects Generator](#table-of-contents) 
-You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG to generate replication objects for ODP SAPI and CDS Extractors in legacy systems such as SAP ECC. 
+You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG to generate replication objects for SAPI and CDS Extractors in legacy systems such as SAP ECC. 
 
 ![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
 
