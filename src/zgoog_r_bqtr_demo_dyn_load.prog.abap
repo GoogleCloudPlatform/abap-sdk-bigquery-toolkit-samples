@@ -31,15 +31,26 @@ SELECTION-SCREEN END OF BLOCK b2.
 CLASS lcl_main DEFINITION.
 
   PUBLIC SECTION.
-    CLASS-METHODS process.
+    CLASS-METHODS: process,
+      validate.
 
 ENDCLASS.
 
+AT SELECTION-SCREEN ON p_max.
+  lcl_main=>validate( ).
 
 START-OF-SELECTION.
   lcl_main=>process( ).
 
 CLASS lcl_main IMPLEMENTATION.
+
+  METHOD validate.
+    IF p_max > 10000.
+      MESSAGE 'Maximum permitted rows is 10,000. Please reduce the limit.'(003) TYPE 'E'.
+    ELSEIF p_max < 1.
+      MESSAGE 'Invalid value for max rows. Please enter a value greater than 0.'(004) TYPE 'E'.
+    ENDIF.
+  ENDMETHOD.
 
   METHOD process.
 
@@ -63,17 +74,17 @@ CLASS lcl_main IMPLEMENTATION.
         SELECT *
                FROM (p_dsrc)
                INTO TABLE <lt_data>
-          UP TO p_max ROWS.
+        UP TO p_max ROWS.
 
         DATA: lv_error_code TYPE sysubrc.
         DATA: lt_return TYPE bapiret2_t.
 
         lo_bqtr->replicate_data(
-         EXPORTING
-           it_content     = <lt_data>
-         IMPORTING
-           ev_error_code  = lv_error_code
-           et_return      = lt_return ).
+          EXPORTING
+            it_content    = <lt_data>
+          IMPORTING
+            ev_error_code = lv_error_code
+            et_return     = lt_return ).
 
         IF lv_error_code = 0.
           DATA: lv_count TYPE i.

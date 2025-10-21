@@ -15,23 +15,30 @@
 " Sample Program to send data to BiqQuery using the BigQuery Toolkit for SAP
 REPORT zgoog_r_bqtr_ex_send_data_bq.
 
+DATA: lt_t100 TYPE STANDARD TABLE OF t100 WITH DEFAULT KEY.
+
 " Select Data to Replicate
-SELECT * FROM mara INTO TABLE @DATA(lt_mara) UP TO 100 ROWS.
+SELECT * FROM t100 INTO TABLE lt_t100 UP TO 100 ROWS.
 
 IF sy-subrc = 0.
   TRY.
-      DATA(lo_bq_replication) = NEW /goog/cl_bqtr_data_load(
-        iv_mass_tr_key = 'DEMO_BQT'   " Transfer key from /GOOG/BQTR_MASTR
-        iv_data_source = 'MARA'       " ABAP Dictionary Object Name such as Table, CDS View
-      ).
+      DATA: lo_bq_replication TYPE REF TO /goog/cl_bqtr_data_load.
+
+      CREATE OBJECT lo_bq_replication
+        EXPORTING
+          iv_mass_tr_key = 'DEMO_BQT'   " Transfer key from /GOOG/BQTR_MASTR
+          iv_data_source = 'T100'.       " ABAP Dictionary Object Name such as Table, CDS View
 
       " Replicate data to BigQuery
+      DATA: lv_error_code TYPE sysubrc.
+      DATA: lt_return TYPE bapiret2_t.
+
       lo_bq_replication->replicate_data(
         EXPORTING
-          it_content    = lt_mara                 " Table Content
+          it_content    = lt_t100                " Table Content
         IMPORTING
-          ev_error_code = DATA(lv_error_code)     " Error Code
-          et_return     = DATA(lt_return)         " Return Table
+          ev_error_code = lv_error_code     " Error Code
+          et_return     = lt_return        " Return Table
       ).
 
       " Handle Errors and exceptions
@@ -40,7 +47,7 @@ IF sy-subrc = 0.
       ELSE.
         MESSAGE 'An error occurred during data transfer. Please retry' TYPE 'E'.
       ENDIF.
-    CATCH /goog/cx_sdk INTO DATA(lo_exp). " ABAP SDK for Google Cloud: Exception Class
+    CATCH /goog/cx_sdk. " ABAP SDK for Google Cloud: Exception Class
       MESSAGE 'An error occurred during data transfer. Please retry' TYPE 'E'.
   ENDTRY.
 ENDIF.

@@ -166,6 +166,25 @@ public section.
       !EV_DTPNM type RSBKDTPNM
       !EV_SY_SUBRC type SYST_SUBRC
       !ET_RETURN type BAPIRET2_T .
+  class-methods CREATE_TRNF_BW
+    importing
+      !IV_MASS_TR_KEY type /GOOG/TRKEY
+      !IV_TLOGO_DS type T_TLOGO
+      !IV_TLOGO_ADSO type T_TLOGO
+      !IV_TABNAME type TABNAME
+    exporting
+      !ES_TLOGO type T_TLOGO
+      !EV_SY_SUBRC type SYST_SUBRC
+      !ET_RETURN type BAPIRET2_T .
+  class-methods APPLY_ROUTINE_INFOPROVIDER
+    importing
+      !IV_MASS_TR_KEY type /GOOG/TRKEY
+      !IV_TLOGO_DS type T_TLOGO
+      !IO_TRFN type ref to CL_RSTRAN_TRFN
+      !IV_TABNAME type TABNAME
+    exporting
+      !EV_SY_SUBRC type SYST_SUBRC
+      !ET_RETURN type BAPIRET2_T .
   PROTECTED SECTION.
 private section.
 
@@ -1814,6 +1833,187 @@ CLASS ZGOOG_CL_BQTR_GEN_BW_OBJECT IMPLEMENTATION.
     ENDLOOP.
 
     COMMIT WORK.
+
+  ENDMETHOD.
+
+
+  METHOD apply_routine_infoprovider.
+
+    DATA: lt_abap_source TYPE rstran_t_abapsource.
+    DATA: ls_source TYPE abapsource.
+
+    DATA: lo_cmp    TYPE REF TO cl_cmp_composer,
+          lo_cmpf   TYPE REF TO cx_cmp_failure,
+          lo_root   TYPE REF TO cx_root,
+          lt_buffer TYPE rswsourcet.
+
+    TYPES: BEGIN OF lty_param,
+             mass_tr_key   TYPE /goog/trkey,
+             data_source   TYPE string,
+             cdc_framework TYPE string,
+             mandt_fnam    TYPE name_feld,
+           END OF lty_param.
+    DATA: ls_param TYPE lty_param.
+    CONSTANTS: lc_start TYPE string VALUE 'ZGOOG_I_BQTR_TEMPLATE_START',
+               lc_end   TYPE string VALUE 'ZGOOG_I_BQTR_TEMPLATE_END'.
+
+
+    CLEAR: et_return, ev_sy_subrc.
+
+    ls_param = VALUE #( mass_tr_key   = iv_mass_tr_key
+                        data_source   = iv_tabname
+                        cdc_framework = 'ODQ' ).
+
+    lcl_code_composer_util=>generate_code_using_cc( EXPORTING iv_template = lc_start
+                                                              is_params   = ls_param
+                                                    IMPORTING ev_error    = DATA(lv_error)
+                                                              et_code     = lt_abap_source ).
+
+    DATA: lo_ex TYPE REF TO cx_root.
+    TRY.
+*       Create routine and get reference and codeid of routine
+        CALL METHOD io_trfn->create_start_routine( ).
+        DATA: lo_routine_start TYPE REF TO cl_rstran_step_rout.
+        lo_routine_start = io_trfn->get_start_routine( ).
+
+        DATA: lv_codeid_start TYPE rscodeid.
+        lo_routine_start->get_codeid(
+          IMPORTING
+            e_codid = lv_codeid_start ).
+
+*       Set new routine code
+        lo_routine_start->store_routine(
+          i_codeid   = lv_codeid_start
+          i_t_source = lt_abap_source ).
+      CATCH cx_root INTO lo_ex.
+        ev_sy_subrc = 4.
+        add_bapiret2_from_cx_root(
+          EXPORTING
+            io_error    = lo_ex
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+        RETURN.
+    ENDTRY.
+
+    TRY.
+*       Create routine and get reference and codeid of routine
+        CALL METHOD io_trfn->create_end_routine( ).
+        DATA: lo_routine_end TYPE REF TO cl_rstran_step_rout.
+        lo_routine_end = io_trfn->get_end_routine( ).
+
+        DATA: lv_codeid_end TYPE rscodeid.
+        lo_routine_end->get_codeid(
+          IMPORTING
+            e_codid = lv_codeid_end ).
+
+        CLEAR lt_abap_source.
+
+        ls_source-line = | CLEAR RESULT_PACKAGE[]. |.
+        APPEND ls_source TO lt_abap_source.
+
+*       Set new routine code
+        lo_routine_end->store_routine(
+          i_codeid   = lv_codeid_end
+          i_t_source = lt_abap_source ).
+      CATCH cx_root INTO lo_ex.
+        ev_sy_subrc = 4.
+        add_bapiret2_from_cx_root(
+          EXPORTING
+            io_error    = lo_ex
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+
+  ENDMETHOD.
+
+
+  METHOD create_trnf_bw.
+    DATA:
+      ls_source TYPE rstran_s_tlogo,
+      ls_target TYPE rstran_s_tlogo,
+      lv_subrc  TYPE sysubrc,
+      lo_trfn   TYPE REF TO cl_rstran_trfn,
+      lx_ex     TYPE REF TO cx_root.
+
+    CLEAR: et_return, ev_sy_subrc.
+    "TODO - Check existance
+
+    MOVE-CORRESPONDING iv_tlogo_ds TO ls_source.
+    MOVE-CORRESPONDING iv_tlogo_adso TO ls_target.
+
+    TRY.
+        lo_trfn = cl_rstran_trfn=>factory(
+          EXPORTING
+            i_s_source = ls_source
+            i_s_target = ls_target
+        ).
+      CATCH cx_root INTO lx_ex.
+        ev_sy_subrc = 4.
+        add_bapiret2_from_cx_root(
+          EXPORTING
+            io_error    = lx_ex
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+    DATA: lv_tranid TYPE rstranid.
+
+    lo_trfn->get_tranid(
+      IMPORTING
+        e_tranid = lv_tranid ).
+
+    apply_routine_infoprovider(
+      iv_mass_tr_key = iv_mass_tr_key
+      iv_tlogo_ds = iv_tlogo_ds
+      iv_tabname  = iv_tabname
+      io_trfn        = lo_trfn ).
+
+*  Try to save object
+    TRY.
+        lo_trfn->if_rso_tlogo_maintain~save(
+          EXPORTING
+            i_with_cto = abap_false
+          IMPORTING
+            e_subrc    = lv_subrc ).
+        IF lv_subrc <> 0.
+          ev_sy_subrc = lv_subrc.
+          /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+            CHANGING
+              ct_bapiret2 = et_return ).
+          RETURN.
+        ENDIF.
+      CATCH cx_root INTO lx_ex.
+        ev_sy_subrc = 4.
+        add_bapiret2_from_cx_root(
+          EXPORTING
+            io_error    = lx_ex
+          CHANGING
+            ct_bapiret2 = et_return ).
+        RETURN.
+    ENDTRY.
+
+*  Try to activate object
+    lo_trfn->if_rso_tlogo_maintain~activate(
+      EXPORTING
+        i_force_activation = abap_true
+        i_with_cto         = abap_false
+      IMPORTING
+        e_subrc            = lv_subrc ).
+
+    IF lv_subrc <> 0.
+      ev_sy_subrc = lv_subrc.
+      /goog/cl_bqtr_utility=>add_bapiret2_from_sy(
+        CHANGING
+          ct_bapiret2 = et_return ).
+      RETURN.
+    ENDIF.
+
+    es_tlogo-objnm = lv_tranid.
+    es_tlogo-tlogo    = 'TRFN'.
 
   ENDMETHOD.
 ENDCLASS.

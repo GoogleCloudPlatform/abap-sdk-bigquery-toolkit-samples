@@ -23,6 +23,18 @@
      <LENGTH>132</LENGTH>
     </item>
     <item>
+     <ID>I</ID>
+     <KEY>003</KEY>
+     <ENTRY>Maximum permitted rows is 10,000. Please reduce the limit.</ENTRY>
+     <LENGTH>116</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>004</KEY>
+     <ENTRY>Invalid value for max rows. Please enter a value greater than 0.</ENTRY>
+     <LENGTH>128</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
      <ENTRY>Demo: BigQuery Toolkit Dynamic Load Program</ENTRY>
      <LENGTH>43</LENGTH>

@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>ZGOOG_R_BQTR_GEN_REPL_OBJECTS</NAME>
+    <NAME>ZGOOG_R_BQTR_GEN_REPL_OBJ_BW</NAME>
     <SUBC>1</SUBC>
     <RLOAD>E</RLOAD>
     <FIXPT>X</FIXPT>
@@ -60,34 +60,14 @@
     </item>
     <item>
      <ID>R</ID>
-     <ENTRY>BigQuery Replication Objects Generator - CDS</ENTRY>
-     <LENGTH>44</LENGTH>
+     <ENTRY>BigQuery Replication Objects Generator - BW InfoProvider</ENTRY>
+     <LENGTH>56</LENGTH>
     </item>
     <item>
      <ID>S</ID>
      <KEY>P_ACTIV</KEY>
      <ENTRY>Activate Process chain</ENTRY>
      <LENGTH>30</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_ADSO</KEY>
-     <ENTRY>ADSO name</ENTRY>
-     <LENGTH>17</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_APPL</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
-     <SPLIT>D</SPLIT>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_CDS</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
-     <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
@@ -98,27 +78,9 @@
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_CLEAN</KEY>
-     <ENTRY>Cleanup Artifacts</ENTRY>
-     <LENGTH>25</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_CREATE</KEY>
-     <ENTRY>Create Artifacts</ENTRY>
-     <LENGTH>24</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
      <KEY>P_DPATH</KEY>
      <ENTRY>Download Directory Path</ENTRY>
      <LENGTH>31</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_DSNAM</KEY>
-     <ENTRY>BW Data Source Name</ENTRY>
-     <LENGTH>27</LENGTH>
     </item>
     <item>
      <ID>S</ID>
@@ -128,9 +90,10 @@
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_ESTRM</KEY>
-     <ENTRY>Enable Streaming</ENTRY>
-     <LENGTH>24</LENGTH>
+     <KEY>P_EXTMD</KEY>
+     <ENTRY>.</ENTRY>
+     <LENGTH>9</LENGTH>
+     <SPLIT>D</SPLIT>
     </item>
     <item>
      <ID>S</ID>
@@ -147,22 +110,21 @@
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_LOGSY</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
-     <SPLIT>D</SPLIT>
+     <KEY>P_INFOP</KEY>
+     <ENTRY>InfoProvider</ENTRY>
+     <LENGTH>20</LENGTH>
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_MANDT</KEY>
-     <ENTRY>Transfer with MANDT field</ENTRY>
-     <LENGTH>36</LENGTH>
+     <KEY>P_INFOT</KEY>
+     <ENTRY>InfoProvider Object Type</ENTRY>
+     <LENGTH>32</LENGTH>
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_MFNAM</KEY>
-     <ENTRY>Field Name for Mandt</ENTRY>
-     <LENGTH>28</LENGTH>
+     <KEY>P_INFTB</KEY>
+     <ENTRY>InfoProvider Table Name</ENTRY>
+     <LENGTH>31</LENGTH>
     </item>
     <item>
      <ID>S</ID>
@@ -193,48 +155,6 @@
      <KEY>P_PUPL</KEY>
      <ENTRY>Upload File</ENTRY>
      <LENGTH>27</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_SADSO</KEY>
-     <ENTRY>ADSO</ENTRY>
-     <LENGTH>12</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_SALL</KEY>
-     <ENTRY>All generated artifacts</ENTRY>
-     <LENGTH>31</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_SBWDS</KEY>
-     <ENTRY>BW Data Source</ENTRY>
-     <LENGTH>22</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_SCHAI</KEY>
-     <ENTRY>Process Chain</ENTRY>
-     <LENGTH>21</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_SDTP</KEY>
-     <ENTRY>DTP</ENTRY>
-     <LENGTH>11</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_STRIG</KEY>
-     <ENTRY>Process Chain Trigger</ENTRY>
-     <LENGTH>29</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_STRNF</KEY>
-     <ENTRY>Data Transfer</ENTRY>
-     <LENGTH>21</LENGTH>
     </item>
     <item>
      <ID>S</ID>

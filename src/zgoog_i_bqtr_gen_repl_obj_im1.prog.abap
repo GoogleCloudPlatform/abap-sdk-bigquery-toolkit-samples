@@ -30,6 +30,7 @@ CLASS lcl_tool IMPLEMENTATION.
       ls_data-durmi   = p_durmi.
       ls_data-info    = p_info.
       ls_data-active  = p_activ.
+      ls_data-streaming = p_estrm.
       IF p_mandt = abap_true.
         ls_data-mfnam = p_mfnam.
       ENDIF.
@@ -160,6 +161,7 @@ CLASS lcl_tool IMPLEMENTATION.
                   iv_chain    = iv_chain
                   iv_infoara  = iv_info
                   iv_active   = iv_active
+                  iv_streaming = iv_streaming
                   iv_trigger  = CONV #( iv_trig )
                   iv_dtp_load = CONV #( lv_dtp )
                   iv_adso     = CONV #( ls_tlogo_adso-objnm )
@@ -383,6 +385,7 @@ CLASS lcl_tool IMPLEMENTATION.
                 iv_info   = <ls_data>-info
                 iv_mfnam  = <ls_data>-mfnam
                 iv_active = <ls_data>-active
+                iv_streaming = <ls_data>-streaming
                 ).
       ENDIF.
     ENDLOOP.

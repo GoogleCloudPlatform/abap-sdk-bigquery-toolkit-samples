@@ -13,8 +13,6 @@
 *  and limitations under the License.                                *
 **********************************************************************
 
-TYPE-POOLS: truxs.
-
 TYPES: BEGIN OF gty_excel_data,
          tablename       TYPE dd03l-tabname,
          cdsviewname(40) TYPE c,
@@ -35,7 +33,7 @@ TYPES: BEGIN OF gty_excel_data,
          sqlviewname(30) TYPE c,
          package(15)     TYPE c,
          transport(10)   TYPE c,
-         status(30)      TYPE c,
+         status(70)      TYPE c,
        END OF gty_output.
 
 DATA: gt_excel_data      TYPE TABLE OF gty_excel_data,

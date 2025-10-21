@@ -23,8 +23,11 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
 
     IF sy-subrc = 0 AND gt_dd03l_extract[] IS NOT INITIAL.
       CLEAR : ev_keyfieldlist,ev_nonkeyfieldlist, lv_lines.
-      DESCRIBE TABLE gt_dd03l_extract LINES lv_lines.
-      LOOP AT gt_dd03l_extract INTO gs_dd03l_extract WHERE fieldname(1) <> '.'.
+      DATA(lt_dd03l) = gt_dd03l_extract.
+      DELETE lt_dd03l WHERE fieldname(1) = '.'.
+      DESCRIBE TABLE lt_dd03l LINES lv_lines.
+
+      LOOP AT lt_dd03l INTO gs_dd03l_extract WHERE fieldname(1) <> '.'.
         DATA(lv_alias) = get_field_alias( gs_dd03l_extract ).
         IF gs_dd03l_extract-keyflag = 'X'.
 
@@ -121,11 +124,6 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
     IF gt_excel_data[] IS NOT INITIAL.
       LOOP AT gt_excel_data INTO gs_excel_data.
         "fetch the table metadata
-*        CALL FUNCTION 'IUUC_DD03L_EXTRACT'
-*          EXPORTING
-*            iv_tabname   = gs_excel_data-tablename
-*          TABLES
-*            it_fieldlist = gt_dd03l_extract[].
         SELECT *
           FROM dd03l
           INTO TABLE gt_dd03l_extract
@@ -250,6 +248,8 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
           lv_devclass   TYPE devclass,
           lv_ddl_source TYPE ddlname,
           ls_ddddlsrcv  TYPE ddddlsrcv.
+    DATA: lx_cx_dd_ddl_save     TYPE REF TO cx_dd_ddl_save,
+          lx_cx_dd_ddl_activate TYPE REF TO cx_dd_ddl_activate.
 
     DATA(lref_dd_ddl_handler) = cl_dd_ddl_handler_factory=>create( ).
 
@@ -275,16 +275,17 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
             put_state    = lv_putstate
             ddddlsrcv_wa = ls_ddddlsrcv.
 
-      CATCH cx_dd_ddl_save.
+      CATCH cx_dd_ddl_save INTO lx_cx_dd_ddl_save.
+        DATA(lv_error) = lx_cx_dd_ddl_save->get_text( ).
     ENDTRY.
-    IF sy-subrc = 0.
+    IF sy-subrc = 0 AND lv_error IS INITIAL.
       TRY.
           CALL METHOD lref_dd_ddl_handler->activate
             EXPORTING
               name = lv_ddl_source.
 
-        CATCH cx_dd_ddl_activate.
-
+        CATCH cx_dd_ddl_activate INTO lx_cx_dd_ddl_activate.
+          lv_error = lx_cx_dd_ddl_activate->get_text( ).
       ENDTRY.
     ENDIF.
 
@@ -323,19 +324,25 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
           rc         = lv_subrc2.
       IF lv_subrc2 = 0 AND iv_sql_view IS NOT INITIAL.
 
-        CALL METHOD lref_dd_ddl_handler->write_trkorr
-          EXPORTING
-            trkorr     = p_tr
-            objectname = iv_sql_view
-            prid       = -1
-          IMPORTING
-            order      = lv_order
-            task       = lv_task
-            rc         = lv_subrc3.
+*        CALL METHOD lref_dd_ddl_handler->write_trkorr
+*          EXPORTING
+*            trkorr     = p_tr
+*            objectname = iv_sql_view
+*            prid       = -1
+*          IMPORTING
+*            order      = lv_order
+*            task       = lv_task
+*            rc         = lv_subrc3.
+*
+*        IF lv_subrc3 <> 0 AND lv_error IS INITIAL.
+*          lv_error = 'Unable to write SQL View to TR'.
+*        ENDIF.
+      ELSEIF lv_error IS INITIAL.
+        lv_error = 'Unable to write CDS View to TR'.
       ENDIF.
 
       CLEAR: gs_output.
-      IF lv_subrc2 = 0. "AND lv_subrc2 = 0.
+      IF lv_subrc2 = 0 AND lv_error IS INITIAL.  "AND lv_subrc2 = 0.
 
         gs_output-tablename = gs_excel_data-tablename.
         gs_output-cdsviewname = gs_excel_data-cdsviewname.
@@ -349,7 +356,7 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
         gs_output-sqlviewname = iv_sql_view.
         gs_output-package = p_pkg.
         gs_output-transport = p_tr.
-        gs_output-status = 'Some error occured'.
+        gs_output-status = 'Some error occured.' && lv_error.
       ENDIF.
       IF p_old = abap_false.
         CLEAR: gs_output-sqlviewname.

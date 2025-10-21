@@ -127,7 +127,11 @@ CLASS lcl_file_handler IMPLEMENTATION.
 
     APPEND ls_template TO lt_template.
 
-    DATA: lt_csv_converted_table TYPE truxs_t_text_data.
+    TYPES:
+      t_text_line  TYPE c LENGTH 4096,
+      tt_text_data TYPE STANDARD TABLE OF t_text_line WITH EMPTY KEY.
+
+    DATA: lt_csv_converted_table TYPE tt_text_data.
     lv_csv_file = p_dpath && '\' && 'cds_gen_template.csv'.
 
     DATA: lv_csv_line TYPE c LENGTH 4096.
