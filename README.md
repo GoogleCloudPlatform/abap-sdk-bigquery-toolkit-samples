@@ -81,7 +81,7 @@ Upon running, the program will generate CDS Object specified in the file. In cas
 
 
 ### [2.2 - Replication Objects Generator](#table-of-contents) 
-The program ZGOOG_R_BQTR_GEN_REPL_OBJECTS will generate the following data replication objects for each CDS Object specified in the input.  
+The program [ZGOOG_R_BQTR_GEN_REPL_OBJECTS](/src/zgoog_r_bqtr_gen_repl_objects.prog.abap) will generate the following data replication objects for each CDS Object specified in the input.  
  - BW (CDS) Datasource
  - Advanced Data Store Object (ADSO)
  - Data Transfer Process (DTP)
