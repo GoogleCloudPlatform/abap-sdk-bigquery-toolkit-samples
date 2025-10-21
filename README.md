@@ -13,7 +13,7 @@ By calling the BigQuery Toolkit Data Load Class from within a Data extraction me
 
 
 ## Overview
-This repo includes tools designed to simplify and accelerate the process of extracting data from SAP systems and loading it into Google BigQuery by utilizing Datasources. These tools offer the following benefits -
+This repo includes sample tools designed to simplify and accelerate the process of extracting data from SAP systems and loading it into Google BigQuery by utilizing Datasources. These tools offer the following benefits -
 - Reduced Development Effort: Automates the creation of CDS views / entities and extraction objects, saving developers significant time and effort.
 - Simplified Data Export: Provides a streamlined mechanism for exporting data from SAP to BigQuery.
 - Increased Efficiency: Automated processes and scheduling capabilities improve the efficiency of data transfer.
@@ -59,7 +59,7 @@ The typical user flow for utilizing the tools in this repository is as follows:
 
 
 ### [2.1 - CDS View Generator](#table-of-contents) 
-CDS View Generator program ZGOOG_R_BQTR_GEN_MASS_CDS_VIEW can be used to create delta enabled CDS View or CDS entity for transparent tables in SAP. 
+CDS View Generator program [ZGOOG_R_BQTR_GEN_MASS_CDS_VIEW](/src/zgoog_r_bqtr_gen_mass_cds_view.prog.abap) can be used to create delta enabled CDS View or CDS entity for transparent tables in SAP. 
 
 ![alt_text](images/CDS_Gen.png "CDS Generator Screen")
 
@@ -119,12 +119,12 @@ When you run the B/W Generator program, it will perform the corresponding action
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
 ### [2.3 - Legacy Replication Objects Generator](#table-of-contents) 
-You can use the program [ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG](/src/zgoog_r_bqtr_gen_repl_obj_leg.prog) to generate replication objects for SAPI and CDS Extractors in legacy systems such as SAP ECC. 
+You can use the program [ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG](/src/zgoog_r_bqtr_gen_repl_obj_leg.prog.abap) to generate replication objects for SAPI and CDS Extractors in legacy systems such as SAP ECC. 
 
 ![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
 
 ### [2.4 - BW InfoProvider Replication Objects Generator](#table-of-contents) 
-You can use the program [ZGOOG_R_BQTR_GEN_REPL_OBJ_BW](/src/zgoog_r_bqtr_gen_repl_obj_bw.prog) to generate replication objects for BW InfoProviders such as ADSO, ODSO, CUBE etc.
+You can use the program [ZGOOG_R_BQTR_GEN_REPL_OBJ_BW](/src/zgoog_r_bqtr_gen_repl_obj_bw.prog.abap) to generate replication objects for BW InfoProviders such as ADSO, ODSO, CUBE etc.
 
 ![alt_text](images/Data_Transfer_Gen_BW.png "BW InfoProvider Data Transfer Generator Screen").
 
