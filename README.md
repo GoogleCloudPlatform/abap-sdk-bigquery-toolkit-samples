@@ -119,12 +119,12 @@ When you run the B/W Generator program, it will perform the corresponding action
 [![YouTube](http://i.ytimg.com/vi/p_HPf_ZUF1A/hqdefault.jpg)](https://www.youtube.com/watch?v=p_HPf_ZUF1A)
 
 ### [2.3 - Legacy Replication Objects Generator](#table-of-contents) 
-You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG to generate replication objects for SAPI and CDS Extractors in legacy systems such as SAP ECC. 
+You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG(/src/zgoog_r_bqtr_gen_repl_obj_leg.prog) to generate replication objects for SAPI and CDS Extractors in legacy systems such as SAP ECC. 
 
 ![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
 
 ### [2.4 - BW InfoProvider Replication Objects Generator](#table-of-contents) 
-You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_BW to generate replication objects for BW InfoProviders such as ADSO, ODSO, CUBE etc.
+You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_BW(/src/zgoog_r_bqtr_gen_repl_obj_bw.prog) to generate replication objects for BW InfoProviders such as ADSO, ODSO, CUBE etc.
 
 ![alt_text](images/Data_Transfer_Gen_BW.png "BW InfoProvider Data Transfer Generator Screen").
 
