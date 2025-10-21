@@ -34,7 +34,8 @@ This repo includes tools designed to simplify and accelerate the process of extr
    - [2.1 - CDS View Generator](#21---cds-view-generator)
    - [2.2 - Replication Objects Generator](#22---replication-objects-generator)
    - [2.3 - Legacy Replication Objects Generator](#23---legacy-replication-objects-generator)
-   - [2.4 - Dynamic Load Program](#24---dynamic-load-program)
+   - [2.4 - BW InfoProvider Replication Objects Generator](#24---bw-infoprovider-replication-objects-generator)
+   - [2.5 - Dynamic Load Program](#25---dynamic-load-program)
  - [3 - Operations Guide](#3---operations-guide)
 
 
@@ -122,7 +123,12 @@ You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG to generate replication ob
 
 ![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
 
-### [2.4 - Dynamic Load Program](#table-of-contents)
+### [2.4 - BW InfoProvider Replication Objects Generator](#table-of-contents) 
+You can use the program ZGOOG_R_BQTR_GEN_REPL_OBJ_BW to generate replication objects for BW InfoProviders such as ADSO, ODSO, CUBE etc.
+
+![alt_text](images/Data_Transfer_Gen_BW.png "BW InfoProvider Data Transfer Generator Screen").
+
+### [2.5 - Dynamic Load Program](#table-of-contents)
 The program [ZGOOG_R_BQTR_DEMO_DYN_LOAD](/src/zgoog_r_bqtr_demo_dyn_load.prog.abap) demonstrates how you can directly load data from a SAP table or CDS View into BigQuery by using BigQuery Toolkit 
 
 ![alt_text](images/Dynamic_Load_Demo.png "Dynamic Load Demo Program Screen")
