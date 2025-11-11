@@ -123,6 +123,8 @@ You can use the program [ZGOOG_R_BQTR_GEN_REPL_OBJ_LEG](/src/zgoog_r_bqtr_gen_re
 
 ![alt_text](images/Data_Transfer_Gen_Legacy.png "Legacy Data Transfer Generator Screen").
 
+Note: Legacy systems such as SAP ECC only support full loads for CDS Views due to standard system constraints.
+
 ### [2.4 - BW InfoProvider Replication Objects Generator](#table-of-contents) 
 You can use the program [ZGOOG_R_BQTR_GEN_REPL_OBJ_BW](/src/zgoog_r_bqtr_gen_repl_obj_bw.prog.abap) to generate replication objects for BW InfoProviders such as ADSO, ODSO, CUBE etc.
 
