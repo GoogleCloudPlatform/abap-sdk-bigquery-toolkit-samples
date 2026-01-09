@@ -174,3 +174,13 @@ If your change results in data loss (i.e removing an existing field or changing 
 - If you delta extraction does not work or fails with an error, apply the note https://me.sap.com/notes/0003590715
 - If you want to run initialization without data transfer and only do delta transfer - follow the steps in this [community blog](https://community.sap.com/t5/technology-blogs-by-members/automate-dtp-with-init-without-data-transfer-processing-mode/ba-p/13268694)
 
+### Support and Issue Reporting
+
+We welcome your feedback and reports to help improve these samples! To ensure your inquiry reaches the right team, please refer to the following guidelines:
+
+*   **BigQuery Toolkit & ABAP SDK:** As these are GA (Generally Available) products from Google Cloud, any issues with the underlying toolkit or SDK should be reported through [Google Cloud Customer Care](https://cloud.google.com/support).
+*   **Sample Programs & Generators:** The programs in this repository (e.g., BW Replication Objects Generator) are provided as **accelerators** to jumpstart your implementation. For bugs or feature requests specific to this sample code, please [open a GitHub issue](https://github.com/GoogleCloudPlatform/abap-sdk-bigquery-toolkit-samples/issues). These are supported by the community on a best-effort basis.
+*   **SAP Standard Functionality:** Issues related to "First Mile Extraction"—such as SAP CDS View definitions, BW Extractor performance, or standard SAP processes—fall under SAP's support domain.
+
+**Note:** For your security, please ensure that any issues opened on GitHub **do not contain** Personally Identifiable Information (PII) or sensitive system data.
+
