@@ -16,7 +16,7 @@
 
 CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
 
-  METHOD prepare_data.
+METHOD prepare_data.
     DATA : lv_lines TYPE i.
 
     CLEAR: lv_lines, ev_keyfieldlist, ev_nonkeyfieldlist.
@@ -29,6 +29,33 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
 
       LOOP AT lt_dd03l INTO gs_dd03l_extract WHERE fieldname(1) <> '.'.
         DATA(lv_alias) = get_field_alias( gs_dd03l_extract ).
+
+        " ----------------------------------------------------------------------
+        " BEGIN NEW LOGIC: Handle Cross-Table QUAN/CURR Unit References
+        " ----------------------------------------------------------------------
+        DATA(lv_fieldname) = CONV string( gs_dd03l_extract-fieldname ).
+
+        IF ( gs_dd03l_extract-datatype = 'QUAN' OR gs_dd03l_extract-datatype = 'CURR' )
+           AND gs_dd03l_extract-reftable IS NOT INITIAL
+           AND gs_dd03l_extract-reftable <> gs_dd03l_extract-tabname.
+
+           " Dynamically fetch the actual length and decimals of the field
+           " We convert to integer (i) to cleanly strip any leading zeros from the DDIC NUMC fields
+           DATA(lv_len) = CONV i( gs_dd03l_extract-leng ).
+           DATA(lv_dec) = CONV i( gs_dd03l_extract-decimals ).
+
+           " Cast to a standard decimal using its actual DDIC dimensions
+           lv_fieldname = |cast( { gs_dd03l_extract-fieldname } as abap.dec({ lv_len },{ lv_dec }) )|.
+
+           " CDS Syntax strictly requires an explicit alias when using CAST.
+           IF lv_alias IS INITIAL.
+             lv_alias = | AS { gs_dd03l_extract-fieldname }|.
+           ENDIF.
+        ENDIF.
+        " ----------------------------------------------------------------------
+        " END NEW LOGIC
+        " ----------------------------------------------------------------------
+
         IF gs_dd03l_extract-keyflag = 'X'.
 
           IF gs_dd03l_extract-fieldname = 'MANDT' AND ( p_old = abap_false OR p_mandt = abap_false ).
@@ -37,22 +64,22 @@ CLASS lcl_cdsview_mass_cr IMPLEMENTATION.
             CONTINUE.
           ELSEIF gs_dd03l_extract-fieldname = 'MANDT' AND p_old = abap_true.
             IF sy-tabix <> lv_lines.
-              CONCATENATE ev_keyfieldlist 'key' gs_dd03l_extract-fieldname lv_alias ',' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
+              CONCATENATE ev_keyfieldlist 'key' lv_fieldname lv_alias ',' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
             ELSE.
-              CONCATENATE ev_keyfieldlist 'key' gs_dd03l_extract-fieldname lv_alias ' ' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
+              CONCATENATE ev_keyfieldlist 'key' lv_fieldname lv_alias ' ' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
             ENDIF.
           ELSE.
             IF sy-tabix <> lv_lines.
-              CONCATENATE ev_keyfieldlist 'key' gs_dd03l_extract-fieldname lv_alias ',' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
+              CONCATENATE ev_keyfieldlist 'key' lv_fieldname lv_alias ',' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
             ELSE.
-              CONCATENATE ev_keyfieldlist 'key' gs_dd03l_extract-fieldname lv_alias ' ' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
+              CONCATENATE ev_keyfieldlist 'key' lv_fieldname lv_alias ' ' cl_abap_char_utilities=>newline INTO ev_keyfieldlist SEPARATED BY space.
             ENDIF.
           ENDIF.
         ELSE.
           IF sy-tabix <> lv_lines.
-            CONCATENATE ev_nonkeyfieldlist gs_dd03l_extract-fieldname lv_alias ',' cl_abap_char_utilities=>newline INTO ev_nonkeyfieldlist SEPARATED BY space.
+            CONCATENATE ev_nonkeyfieldlist lv_fieldname lv_alias ',' cl_abap_char_utilities=>newline INTO ev_nonkeyfieldlist SEPARATED BY space.
           ELSE .
-            CONCATENATE ev_nonkeyfieldlist gs_dd03l_extract-fieldname lv_alias ' ' cl_abap_char_utilities=>newline INTO ev_nonkeyfieldlist SEPARATED BY space.
+            CONCATENATE ev_nonkeyfieldlist lv_fieldname lv_alias ' ' cl_abap_char_utilities=>newline INTO ev_nonkeyfieldlist SEPARATED BY space.
           ENDIF.
         ENDIF.
         CLEAR gs_dd03l_extract.
