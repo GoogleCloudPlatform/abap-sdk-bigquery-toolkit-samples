@@ -24,11 +24,11 @@ CLASS lcl_tool DEFINITION.
     TYPES: BEGIN OF mty_data,
              trkey  TYPE /goog/trkey,
              dsname TYPE rsoltpsourcer,
-             ds     TYPE ddlname,
+             ds     TYPE progname,
              logsy  TYPE rsslogsys,
              appl   TYPE rsapplnm,
              odso   TYPE char9,
-             iobj   TYPE RSIOBJNM,
+             iobj   TYPE rsiobjnm,
              chain  TYPE rspc_chain,
              trig   TYPE rspc_variant,
              info   TYPE rsinfoarea,
@@ -40,7 +40,7 @@ CLASS lcl_tool DEFINITION.
   PRIVATE SECTION.
 
     TYPES: BEGIN OF mty_output,
-             cds         TYPE ddlname,
+             cds         TYPE progname,
              status      TYPE char10,
              description TYPE string,
              value       TYPE string,
@@ -52,18 +52,18 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS cleanup IMPORTING iv_trkey  TYPE /goog/trkey
                                     iv_dsname TYPE rsoltpsourcer
-                                    iv_ds     TYPE ddlname OPTIONAL
+                                    iv_ds     TYPE progname OPTIONAL
                                     iv_iobj   TYPE rsiobjnm
                                     iv_logsy  TYPE rsslogsys
                                     iv_appl   TYPE rsapplnm
-                                    iv_Odso   TYPE char9
+                                    iv_odso   TYPE char9
                                     iv_chain  TYPE rspc_chain
                                     iv_trig   TYPE rspc_variant
                                     iv_info   TYPE rsinfoarea.
 
     CLASS-METHODS create IMPORTING iv_trkey  TYPE /goog/trkey
                                    iv_dsname TYPE rsoltpsourcer
-                                   iv_ds     TYPE ddlname
+                                   iv_ds     TYPE progname
                                    iv_iobj   TYPE rsiobjnm
                                    iv_logsy  TYPE rsslogsys
                                    iv_appl   TYPE rsapplnm
@@ -78,7 +78,7 @@ CLASS lcl_tool DEFINITION.
 
     CLASS-METHODS get_data.
 
-    CLASS-METHODS add_status IMPORTING iv_ds          TYPE ddlname
+    CLASS-METHODS add_status IMPORTING iv_ds          TYPE progname
                                        iv_description TYPE string
                                        iv_value       TYPE string
                                        iv_category    TYPE c DEFAULT 'C'

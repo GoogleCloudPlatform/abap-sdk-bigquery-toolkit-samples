@@ -85,9 +85,8 @@
     <item>
      <ID>S</ID>
      <KEY>P_CDS</KEY>
-     <ENTRY>.</ENTRY>
-     <LENGTH>9</LENGTH>
-     <SPLIT>D</SPLIT>
+     <ENTRY>DDL Source Name</ENTRY>
+     <LENGTH>23</LENGTH>
     </item>
     <item>
      <ID>S</ID>

@@ -42,13 +42,15 @@ AT SELECTION-SCREEN.
   ENDCASE.
 
   "validate package
-  SELECT SINGLE devclass FROM tdevc INTO @DATA(lv_devc) WHERE devclass = @p_pkg.
+  DATA: lv_devc TYPE devclass.
+  SELECT SINGLE devclass FROM tdevc INTO lv_devc WHERE devclass = p_pkg.
   IF sy-subrc <> 0.
     MESSAGE 'Invalid Package' TYPE 'E'.
   ENDIF.
 
   "validate TR
-  SELECT SINGLE trkorr FROM e070 INTO @DATA(lv_tr) WHERE trkorr = @p_tr.
+  DATA: lv_tr TYPE trkorr.
+  SELECT SINGLE trkorr FROM e070 INTO lv_tr WHERE trkorr = p_tr.
   IF sy-subrc <> 0.
     MESSAGE 'Invalid TR' TYPE 'E'.
   ENDIF.

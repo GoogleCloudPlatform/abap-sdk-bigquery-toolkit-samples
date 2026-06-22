@@ -59,7 +59,7 @@ SELECTION-SCREEN END OF BLOCK b7.
 SELECTION-SCREEN BEGIN OF BLOCK b3 WITH FRAME TITLE TEXT-t03.
   PARAMETERS: p_trkey TYPE /goog/trkey MODIF ID lc1 MATCHCODE OBJECT /goog/sh_bqtr_transf_key,
               p_dsnam TYPE rsoltpsourcer MODIF ID bds MATCHCODE OBJECT rsds_datasource,
-              p_cds   TYPE ddlname MODIF ID cds MATCHCODE OBJECT rsds_datasource,
+              p_cds   TYPE progname MODIF ID cds MATCHCODE OBJECT rsds_datasource,
               p_logsy TYPE rsslogsys MODIF ID lc1,
               p_appl  TYPE rsapplnm MODIF ID apl,
               p_adso  TYPE char9 MODIF ID ads MATCHCODE OBJECT rsoadso_search,

@@ -39,7 +39,7 @@ public section.
       !IV_DSNAM type RSOLTPSOURCER
     exporting
       !ES_TLOGO type T_TLOGO
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_ADSO
     importing
@@ -48,7 +48,7 @@ public section.
       !IV_LOGSYS type RSSLOGSYS
     exporting
       !ES_TLOGO type T_TLOGO
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_TRNF
     importing
@@ -59,7 +59,7 @@ public section.
       !IV_MANDT_FVAL type NAME_FELD optional
     exporting
       !ES_TLOGO type T_TLOGO
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_DTP
     importing
@@ -68,7 +68,7 @@ public section.
       !IV_TLOGO_TRNF type T_TLOGO
     exporting
       !EV_DTPNM type RSBKDTPNM
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_PROCESS_CHAIN
     importing
@@ -80,7 +80,7 @@ public section.
       !IV_ADSO type STRING
       !IV_ACTIVE type BOOLEAN default ABAP_TRUE
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_TRIGGER
     importing
@@ -88,32 +88,32 @@ public section.
       !IV_PRDMIN type BTCPMIN optional
       !IV_PRDHOURS type BTCPHOUR optional
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods DELETE_ADSO
     importing
       !IV_ADSONM type RSOADSONM
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods DELETE_BW_DS
     importing
       !IV_NAME type STRING
       !IV_LOGSYS type RSSLOGSYS
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods DELETE_PROCESS_CHAIN
     importing
       !IV_CHAIN type RSPC_CHAIN
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods DELETE_TRIGGER
     importing
       !IV_TRIGGER type RSPC_VARIANT
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods APPLY_ROUTINE
     importing
@@ -122,7 +122,7 @@ public section.
       !IO_TRFN type ref to CL_RSTRAN_TRFN
       !IV_MANDT_FVAL type NAME_FELD optional
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_ODSO
     importing
@@ -132,14 +132,14 @@ public section.
       !IV_LOGSYS type RSSLOGSYS
     exporting
       !ES_TLOGO type T_TLOGO
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods DELETE_ODSO
     importing
       !IV_ADSONM type RSOADSONM
       !IV_IOBJ type RSIOBJNM
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_TRNF_ODSO
     importing
@@ -151,7 +151,7 @@ public section.
       !IV_MANDT_FVAL type NAME_FELD optional
     exporting
       !ES_TLOGO type T_TLOGO
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods ADD_TRNF_MAP_ODSO
     importing
@@ -164,7 +164,7 @@ public section.
       !IV_TLOGO_TRNF type T_TLOGO
     exporting
       !EV_DTPNM type RSBKDTPNM
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods CREATE_TRNF_BW
     importing
@@ -174,7 +174,7 @@ public section.
       !IV_TABNAME type TABNAME
     exporting
       !ES_TLOGO type T_TLOGO
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   class-methods APPLY_ROUTINE_INFOPROVIDER
     importing
@@ -183,7 +183,7 @@ public section.
       !IO_TRFN type ref to CL_RSTRAN_TRFN
       !IV_TABNAME type TABNAME
     exporting
-      !EV_SY_SUBRC type SYST_SUBRC
+      !EV_SY_SUBRC type SYSUBRC
       !ET_RETURN type BAPIRET2_T .
   PROTECTED SECTION.
 private section.
