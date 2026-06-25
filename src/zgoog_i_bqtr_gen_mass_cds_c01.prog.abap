@@ -25,6 +25,7 @@ METHOD prepare_data.
       CLEAR : ev_keyfieldlist,ev_nonkeyfieldlist, lv_lines.
       DATA(lt_dd03l) = gt_dd03l_extract.
       DELETE lt_dd03l WHERE fieldname(1) = '.'.
+      SORT lt_dd03l BY position.
       DESCRIBE TABLE lt_dd03l LINES lv_lines.
 
       LOOP AT lt_dd03l INTO gs_dd03l_extract WHERE fieldname(1) <> '.'.
